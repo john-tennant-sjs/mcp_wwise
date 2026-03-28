@@ -1,0 +1,21 @@
+{
+  "tool": "wwise_ui_bring_to_foreground",
+  "waapi_uri": "ak.wwise.ui.bringToForeground",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "dry_run": {"type": "boolean"}
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": ["success", "data", "error"],
+    "properties": {
+      "success": {"type": "boolean"},
+      "error": {"type": ["string", "null"]},
+      "data": {"type": "null"}
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {"success": true, "data": null, "error": null}
+}

@@ -1,0 +1,96 @@
+{
+  "tool": "wwise_create_object",
+  "waapi_uri": "ak.wwise.core.object.create",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "parent",
+      "object_type",
+      "name"
+    ],
+    "properties": {
+      "parent": {
+        "type": "string"
+      },
+      "object_type": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "on_name_conflict": {
+        "type": "string",
+        "enum": [
+          "fail",
+          "rename",
+          "replace",
+          "merge"
+        ]
+      },
+      "notes": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "dry_run": {
+        "type": "boolean"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "success",
+      "data",
+      "error"
+    ],
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "name"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": {
+      "id": "{AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE}",
+      "name": "_dry_run_object"
+    },
+    "error": null
+  }
+}

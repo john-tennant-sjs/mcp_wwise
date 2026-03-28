@@ -1,0 +1,67 @@
+{
+  "tool": "wwise_set_name",
+  "waapi_uri": "ak.wwise.core.object.setName",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "object_ref",
+      "new_name"
+    ],
+    "properties": {
+      "object_ref": {
+        "type": "string"
+      },
+      "new_name": {
+        "type": "string"
+      },
+      "dry_run": {
+        "type": "boolean"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "success",
+      "data",
+      "error"
+    ],
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "new_name"
+            ],
+            "properties": {
+              "new_name": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": {
+      "new_name": "_dry_run_object"
+    },
+    "error": null
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "tool": "wwise_soundbank_get_inclusions",
+  "waapi_uri": "ak.wwise.core.soundbank.getInclusions",
+  "input_schema": {
+    "type": "object",
+    "required": ["soundbank"],
+    "properties": {
+      "soundbank": {"type": "string"},
+      "dry_run": {"type": "boolean"}
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": ["success", "data", "error"],
+    "properties": {
+      "success": {"type": "boolean"},
+      "error": {"type": ["string", "null"]},
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["inclusions"],
+            "properties": {
+              "inclusions": {"type": "array"}
+            }
+          },
+          {"type": "null"}
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {"success": true, "data": {"inclusions": []}, "error": null}
+}

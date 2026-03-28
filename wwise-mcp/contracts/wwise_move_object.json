@@ -1,0 +1,81 @@
+{
+  "tool": "wwise_move_object",
+  "waapi_uri": "ak.wwise.core.object.move",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "object_ref",
+      "parent"
+    ],
+    "properties": {
+      "object_ref": {
+        "type": "string"
+      },
+      "parent": {
+        "type": "string"
+      },
+      "on_name_conflict": {
+        "type": "string",
+        "enum": [
+          "rename",
+          "replace",
+          "fail"
+        ]
+      },
+      "dry_run": {
+        "type": "boolean"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "success",
+      "data",
+      "error"
+    ],
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "name"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": {
+      "id": "{AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE}",
+      "name": "_dry_run_object"
+    },
+    "error": null
+  }
+}

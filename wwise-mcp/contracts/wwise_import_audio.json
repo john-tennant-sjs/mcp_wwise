@@ -1,0 +1,103 @@
+{
+  "tool": "wwise_import_audio",
+  "waapi_uri": "ak.wwise.core.audio.import",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "imports"
+    ],
+    "properties": {
+      "imports": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "audioFile",
+            "objectPath"
+          ],
+          "properties": {
+            "audioFile": {
+              "type": "string"
+            },
+            "objectPath": {
+              "type": "string"
+            }
+          }
+        },
+        "minItems": 1
+      },
+      "import_operation": {
+        "type": "string"
+      },
+      "import_language": {
+        "type": "string"
+      },
+      "default_object_type": {
+        "type": "string"
+      },
+      "default_import_location": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "dry_run": {
+        "type": "boolean"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "success",
+      "data",
+      "error"
+    ],
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "imported"
+            ],
+            "properties": {
+              "imported": {
+                "type": "array"
+              }
+            }
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": {
+      "imported": [
+        {
+          "id": "{AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE}",
+          "name": "_dry_run_import"
+        }
+      ]
+    },
+    "error": null
+  }
+}

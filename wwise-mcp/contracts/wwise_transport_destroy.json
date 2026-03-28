@@ -1,0 +1,23 @@
+{
+  "tool": "wwise_transport_destroy",
+  "waapi_uri": "ak.wwise.core.transport.destroy",
+  "input_schema": {
+    "type": "object",
+    "required": ["transport"],
+    "properties": {
+      "transport": {"type": "integer"},
+      "dry_run": {"type": "boolean"}
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": ["success", "data", "error"],
+    "properties": {
+      "success": {"type": "boolean"},
+      "error": {"type": ["string", "null"]},
+      "data": {"type": "null"}
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {"success": true, "data": null, "error": null}
+}

@@ -1,0 +1,32 @@
+{
+  "tool": "wwise_profiler_stop_capture",
+  "waapi_uri": "ak.wwise.core.profiler.stopCapture",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "dry_run": {"type": "boolean"}
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": ["success", "data", "error"],
+    "properties": {
+      "success": {"type": "boolean"},
+      "error": {"type": ["string", "null"]},
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["cursor"],
+            "properties": {
+              "cursor": {"type": "integer"}
+            }
+          },
+          {"type": "null"}
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {"success": true, "data": {"cursor": 0}, "error": null}
+}

@@ -1,0 +1,40 @@
+{
+  "tool": "wwise_save_project",
+  "waapi_uri": "ak.wwise.core.project.save",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "dry_run": {
+        "type": "boolean"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "success",
+      "data",
+      "error"
+    ],
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "data": {
+        "type": "null"
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": null,
+    "error": null
+  }
+}

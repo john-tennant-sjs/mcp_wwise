@@ -1,0 +1,34 @@
+{
+  "tool": "wwise_profiler_get_cursor_time",
+  "waapi_uri": "ak.wwise.core.profiler.getCursorTime",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "cursor": {"type": "string"},
+      "dry_run": {"type": "boolean"}
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": ["success", "data", "error"],
+    "properties": {
+      "success": {"type": "boolean"},
+      "error": {"type": ["string", "null"]},
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["time", "cursor"],
+            "properties": {
+              "time": {"type": "integer"},
+              "cursor": {"type": "string"}
+            }
+          },
+          {"type": "null"}
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {"success": true, "data": {"time": 0, "cursor": "capture"}, "error": null}
+}

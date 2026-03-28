@@ -1,0 +1,71 @@
+{
+  "tool": "wwise_set_object",
+  "waapi_uri": "ak.wwise.core.object.set",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "objects"
+    ],
+    "properties": {
+      "objects": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "object"
+          ]
+        },
+        "minItems": 1
+      },
+      "dry_run": {
+        "type": "boolean"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "success",
+      "data",
+      "error"
+    ],
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "updated"
+            ],
+            "properties": {
+              "updated": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": {
+      "updated": 1
+    },
+    "error": null
+  }
+}

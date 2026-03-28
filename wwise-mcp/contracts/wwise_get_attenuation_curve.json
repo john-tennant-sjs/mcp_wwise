@@ -1,0 +1,46 @@
+{
+  "tool": "wwise_get_attenuation_curve",
+  "waapi_uri": "ak.wwise.core.object.getAttenuationCurve",
+  "input_schema": {
+    "type": "object",
+    "required": ["object_ref", "curve_type"],
+    "properties": {
+      "object_ref": {"type": "string"},
+      "curve_type": {"type": "string"},
+      "platform": {"type": ["string", "null"]},
+      "dry_run": {"type": "boolean"}
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": ["success", "data", "error"],
+    "properties": {
+      "success": {"type": "boolean"},
+      "error": {"type": ["string", "null"]},
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["points", "use"],
+            "properties": {
+              "points": {"type": "array"},
+              "use": {"type": "string"},
+              "curveType": {"type": "string"}
+            }
+          },
+          {"type": "null"}
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": {
+      "points": [{"x": 0, "y": 0, "shape": "Linear"}, {"x": 100, "y": -96, "shape": "Linear"}],
+      "use": "Custom",
+      "curveType": "VolumeDryUsage"
+    },
+    "error": null
+  }
+}

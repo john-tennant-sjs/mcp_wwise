@@ -1,0 +1,21 @@
+{
+  "tool": "wwise_undo_cancel_group",
+  "waapi_uri": "ak.wwise.core.undo.cancelGroup",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "dry_run": {"type": "boolean"}
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": ["success", "data", "error"],
+    "properties": {
+      "success": {"type": "boolean"},
+      "error": {"type": ["string", "null"]},
+      "data": {"type": "null"}
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {"success": true, "data": null, "error": null}
+}

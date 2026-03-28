@@ -1,0 +1,48 @@
+{
+  "tool": "wwise_get_info",
+  "waapi_uri": "ak.wwise.core.getInfo",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "dry_run": {"type": "boolean"}
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": ["success", "data", "error"],
+    "properties": {
+      "success": {"type": "boolean"},
+      "error": {"type": ["string", "null"]},
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["version"],
+            "properties": {
+              "version": {"type": "object"},
+              "displayName": {"type": "string"},
+              "platform": {"type": "string"},
+              "sessionId": {"type": "string"},
+              "apiVersion": {"type": "integer"},
+              "processId": {"type": "integer"}
+            }
+          },
+          {"type": "null"}
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": {
+      "version": {"displayName": "v2023.1.17.8841"},
+      "displayName": "Wwise v2023.1.17.8841",
+      "platform": "x64",
+      "sessionId": "00000000-0000-0000-0000-000000000000",
+      "apiVersion": 1,
+      "processId": 0
+    },
+    "error": null
+  }
+}

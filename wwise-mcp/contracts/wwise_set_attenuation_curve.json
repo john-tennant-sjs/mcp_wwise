@@ -1,0 +1,27 @@
+{
+  "tool": "wwise_set_attenuation_curve",
+  "waapi_uri": "ak.wwise.core.object.setAttenuationCurve",
+  "input_schema": {
+    "type": "object",
+    "required": ["object_ref", "curve_type", "use", "points"],
+    "properties": {
+      "object_ref": {"type": "string"},
+      "curve_type": {"type": "string"},
+      "use": {"type": "string"},
+      "points": {"type": "array", "items": {"type": "object"}},
+      "platform": {"type": ["string", "null"]},
+      "dry_run": {"type": "boolean"}
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": ["success", "data", "error"],
+    "properties": {
+      "success": {"type": "boolean"},
+      "error": {"type": ["string", "null"]},
+      "data": {"type": "null"}
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {"success": true, "data": null, "error": null}
+}

@@ -1,0 +1,23 @@
+{
+  "tool": "wwise_transport_prepare",
+  "waapi_uri": "ak.wwise.core.transport.prepare",
+  "input_schema": {
+    "type": "object",
+    "required": ["object_ref"],
+    "properties": {
+      "object_ref": {"type": "string"},
+      "dry_run": {"type": "boolean"}
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": ["success", "data", "error"],
+    "properties": {
+      "success": {"type": "boolean"},
+      "error": {"type": ["string", "null"]},
+      "data": {"type": "null"}
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {"success": true, "data": null, "error": null}
+}

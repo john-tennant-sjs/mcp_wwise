@@ -1,0 +1,89 @@
+{
+  "tool": "wwise_transport_execute",
+  "waapi_uri": "ak.wwise.core.transport.executeAction",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "object_ref"
+    ],
+    "properties": {
+      "object_ref": {
+        "type": "string"
+      },
+      "action": {
+        "type": "string",
+        "enum": [
+          "play",
+          "stop",
+          "pause",
+          "resume",
+          "playStop",
+          "seek"
+        ]
+      },
+      "seek_position": {
+        "oneOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "dry_run": {
+        "type": "boolean"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "success",
+      "data",
+      "error"
+    ],
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "action",
+              "transport"
+            ],
+            "properties": {
+              "action": {
+                "type": "string"
+              },
+              "transport": {
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": {
+      "action": "play",
+      "transport": 0
+    },
+    "error": null
+  }
+}

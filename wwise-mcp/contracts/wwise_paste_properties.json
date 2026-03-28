@@ -1,0 +1,27 @@
+{
+  "tool": "wwise_paste_properties",
+  "waapi_uri": "ak.wwise.core.object.pasteProperties",
+  "input_schema": {
+    "type": "object",
+    "required": ["source", "targets"],
+    "properties": {
+      "source": {"type": "string"},
+      "targets": {"type": "array", "items": {"type": "string"}},
+      "paste_mode": {"type": "string"},
+      "inclusion": {"type": ["array", "null"]},
+      "exclusion": {"type": ["array", "null"]},
+      "dry_run": {"type": "boolean"}
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": ["success", "data", "error"],
+    "properties": {
+      "success": {"type": "boolean"},
+      "error": {"type": ["string", "null"]},
+      "data": {"type": "null"}
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {"success": true, "data": null, "error": null}
+}

@@ -1,0 +1,33 @@
+{
+  "tool": "wwise_ui_get_selected_objects",
+  "waapi_uri": "ak.wwise.ui.getSelectedObjects",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "return_props": {"type": "array", "items": {"type": "string"}},
+      "dry_run": {"type": "boolean"}
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": ["success", "data", "error"],
+    "properties": {
+      "success": {"type": "boolean"},
+      "error": {"type": ["string", "null"]},
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["objects"],
+            "properties": {
+              "objects": {"type": "array"}
+            }
+          },
+          {"type": "null"}
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {"success": true, "data": {"objects": []}, "error": null}
+}

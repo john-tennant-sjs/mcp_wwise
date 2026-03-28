@@ -1,0 +1,73 @@
+{
+  "tool": "wwise_create_transport",
+  "waapi_uri": "ak.wwise.core.transport.create",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "object_ref"
+    ],
+    "properties": {
+      "object_ref": {
+        "type": "string"
+      },
+      "game_object_id": {
+        "oneOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "dry_run": {
+        "type": "boolean"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "success",
+      "data",
+      "error"
+    ],
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "transport"
+            ],
+            "properties": {
+              "transport": {
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": {
+      "transport": 0
+    },
+    "error": null
+  }
+}

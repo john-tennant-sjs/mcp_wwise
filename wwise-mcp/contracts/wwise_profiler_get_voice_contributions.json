@@ -1,0 +1,36 @@
+{
+  "tool": "wwise_profiler_get_voice_contributions",
+  "waapi_uri": "ak.wwise.core.profiler.getVoiceContributions",
+  "input_schema": {
+    "type": "object",
+    "required": ["voice_pipeline_id", "time"],
+    "properties": {
+      "voice_pipeline_id": {"type": "integer"},
+      "time": {"type": "integer"},
+      "busses_pipeline_id": {"type": ["integer", "null"]},
+      "dry_run": {"type": "boolean"}
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": ["success", "data", "error"],
+    "properties": {
+      "success": {"type": "boolean"},
+      "error": {"type": ["string", "null"]},
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["contributions"],
+            "properties": {
+              "contributions": {"type": "array"}
+            }
+          },
+          {"type": "null"}
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {"success": true, "data": {"contributions": []}, "error": null}
+}

@@ -1,0 +1,34 @@
+{
+  "tool": "wwise_log_get",
+  "waapi_uri": "ak.wwise.core.log.get",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "channel": {"type": "string"},
+      "dry_run": {"type": "boolean"}
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": ["success", "data", "error"],
+    "properties": {
+      "success": {"type": "boolean"},
+      "error": {"type": ["string", "null"]},
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["items", "channel"],
+            "properties": {
+              "items": {"type": "array"},
+              "channel": {"type": "string"}
+            }
+          },
+          {"type": "null"}
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {"success": true, "data": {"items": [], "channel": "general"}, "error": null}
+}

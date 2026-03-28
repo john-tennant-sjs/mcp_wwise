@@ -1,0 +1,63 @@
+{
+  "tool": "wwise_delete_object",
+  "waapi_uri": "ak.wwise.core.object.delete",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "object_ref"
+    ],
+    "properties": {
+      "object_ref": {
+        "type": "string"
+      },
+      "dry_run": {
+        "type": "boolean"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "success",
+      "data",
+      "error"
+    ],
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "deleted"
+            ],
+            "properties": {
+              "deleted": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": {
+      "deleted": "\\Actor-Mixer Hierarchy\\Default Work Unit\\MCP_Tests\\_dry_run_object"
+    },
+    "error": null
+  }
+}

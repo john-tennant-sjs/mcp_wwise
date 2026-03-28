@@ -1,0 +1,86 @@
+{
+  "tool": "wwise_set_reference",
+  "waapi_uri": "ak.wwise.core.object.setReference",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "object_ref",
+      "reference",
+      "value"
+    ],
+    "properties": {
+      "object_ref": {
+        "type": "string"
+      },
+      "reference": {
+        "type": "string"
+      },
+      "value": {
+        "type": "string"
+      },
+      "platform": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "dry_run": {
+        "type": "boolean"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "success",
+      "data",
+      "error"
+    ],
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "reference",
+              "value"
+            ],
+            "properties": {
+              "reference": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": {
+      "reference": "Conversion",
+      "value": "{AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE}"
+    },
+    "error": null
+  }
+}

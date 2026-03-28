@@ -1,0 +1,82 @@
+{
+  "tool": "wwise_set_property",
+  "waapi_uri": "ak.wwise.core.object.setProperty",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "object_ref",
+      "property_name",
+      "value"
+    ],
+    "properties": {
+      "object_ref": {
+        "type": "string"
+      },
+      "property_name": {
+        "type": "string"
+      },
+      "value": {},
+      "platform": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "dry_run": {
+        "type": "boolean"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "success",
+      "data",
+      "error"
+    ],
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "property",
+              "value"
+            ],
+            "properties": {
+              "property": {
+                "type": "string"
+              },
+              "value": {}
+            }
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": {
+      "property": "Volume",
+      "value": -6.0
+    },
+    "error": null
+  }
+}

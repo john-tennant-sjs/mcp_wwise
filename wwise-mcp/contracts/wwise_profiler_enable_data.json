@@ -1,0 +1,23 @@
+{
+  "tool": "wwise_profiler_enable_data",
+  "waapi_uri": "ak.wwise.core.profiler.enableProfilerData",
+  "input_schema": {
+    "type": "object",
+    "required": ["data_types"],
+    "properties": {
+      "data_types": {"type": "array", "items": {"type": "string"}},
+      "dry_run": {"type": "boolean"}
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": ["success", "data", "error"],
+    "properties": {
+      "success": {"type": "boolean"},
+      "error": {"type": ["string", "null"]},
+      "data": {"type": "null"}
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {"success": true, "data": null, "error": null}
+}
