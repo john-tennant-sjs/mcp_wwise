@@ -1,0 +1,97 @@
+{
+  "tool": "wwise_get_property_names",
+  "waapi_uri": "ak.wwise.core.object.getPropertyNames",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "object_type": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "class_id": {
+        "oneOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "dry_run": {
+        "type": "boolean"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "success",
+      "data",
+      "error"
+    ],
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "object",
+            "required": [
+              "class_id",
+              "names"
+            ],
+            "properties": {
+              "class_id": {
+                "type": "integer"
+              },
+              "object_type": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "names": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": {
+      "class_id": 65552,
+      "object_type": "Sound",
+      "names": [
+        "Volume",
+        "Pitch",
+        "OutputBus"
+      ]
+    },
+    "error": null
+  }
+}

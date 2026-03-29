@@ -50,6 +50,12 @@
           "null"
         ]
       },
+      "suggestion": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
       "data": {
         "oneOf": [
           {

@@ -1,0 +1,104 @@
+{
+  "tool": "wwise_get_property_and_object_lists",
+  "waapi_uri": "ak.wwise.core.object.getPropertyAndObjectLists",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "property_name": {
+        "type": "string"
+      },
+      "object_ref": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "object_type": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "class_id": {
+        "oneOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "dry_run": {
+        "type": "boolean"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "success",
+      "data",
+      "error"
+    ],
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "object",
+            "required": [
+              "property",
+              "waapi_args",
+              "return"
+            ],
+            "properties": {
+              "property": {
+                "type": "string"
+              },
+              "waapi_args": {
+                "type": "object"
+              },
+              "return": {}
+            },
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": {
+      "property": "Volume",
+      "waapi_args": {
+        "classId": 65552,
+        "property": "Volume"
+      },
+      "return": {
+        "possibilities": []
+      }
+    },
+    "error": null
+  }
+}

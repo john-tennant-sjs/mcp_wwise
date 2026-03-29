@@ -1,7 +1,7 @@
 """
 scripts/validate_contracts.py — Phase 3/4 contract validation (no Wwise required).
 
-For each of the 39 tools:
+For each registered tool with a contract:
   1. Load the contract from contracts/<tool>.json
   2. Call the tool with dry_run=True and minimal valid inputs
   3. Validate the returned response against the contract's output_schema
@@ -66,6 +66,8 @@ from tools.profiler_get_voice_contributions import wwise_profiler_get_voice_cont
 from tools.ui_commands_execute import wwise_ui_commands_execute
 from tools.paste_properties import wwise_paste_properties
 from tools.get_schema import wwise_get_schema
+from tools.get_property_names import wwise_get_property_names
+from tools.get_property_and_object_lists import wwise_get_property_and_object_lists
 from tools.ui_bring_to_foreground import wwise_ui_bring_to_foreground
 from tools.client import validate_response
 
@@ -114,6 +116,8 @@ DRY_RUN_CALLS = [
     ("wwise_ui_commands_execute",         wwise_ui_commands_execute,         {"command": "FindInProjectExplorer", "dry_run": True}),
     ("wwise_paste_properties",            wwise_paste_properties,            {"source": MOCK_PATH, "targets": [MOCK_PATH], "dry_run": True}),
     ("wwise_get_schema",                  wwise_get_schema,                  {"uri": "ak.wwise.core.object.get", "dry_run": True}),
+    ("wwise_get_property_names",          wwise_get_property_names,          {"object_type": "Sound", "dry_run": True}),
+    ("wwise_get_property_and_object_lists", wwise_get_property_and_object_lists, {"property_name": "Volume", "object_type": "Sound", "dry_run": True}),
     ("wwise_ui_bring_to_foreground",      wwise_ui_bring_to_foreground,      {"dry_run": True}),
 ]
 

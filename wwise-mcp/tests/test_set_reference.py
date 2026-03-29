@@ -35,3 +35,19 @@ def test_set_reference_invalid_object():
 def test_set_reference_invalid_value(test_sound):
     r = wwise_set_reference(test_sound["id"], "Conversion", "\\NonExistent\\Conv")
     assert not r["success"]
+
+
+def test_set_reference_wrong_target_type(test_sound):
+    """OutputBus must point to a Bus, not an AuxBus — WAAPI rejects incompatible types."""
+    with WaapiClient(url=WAAPI_URL) as client:
+        aux_buses = client.call("ak.wwise.core.object.get", {
+            "from": {"ofType": ["AuxBus"]},
+            "options": {"return": ["id", "name"]},
+        })
+    if not (aux_buses and aux_buses.get("return")):
+        pytest.skip("No AuxBus objects in this project.")
+    aux_id = aux_buses["return"][0]["id"]
+    r = wwise_set_reference(test_sound["id"], "OutputBus", aux_id)
+    assert not r["success"]
+    assert "AuxBus" in r["error"]
+    assert r.get("suggestion")

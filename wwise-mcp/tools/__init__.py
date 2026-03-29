@@ -1,4 +1,4 @@
-"""tools — all 39 Phase 2+4 atomic tools."""
+"""tools — Phase 2+4 atomic tools plus WAAPI introspection helpers."""
 
 from . import (
     get_object,
@@ -42,6 +42,8 @@ from . import (
     ui_commands_execute,
     paste_properties,
     get_schema,
+    get_property_names,
+    get_property_and_object_lists,
     ui_bring_to_foreground,
 )
 
@@ -87,5 +89,7 @@ ALL_TOOLS = [
     ui_commands_execute,
     paste_properties,
     get_schema,
+    get_property_names,
+    get_property_and_object_lists,
     ui_bring_to_foreground,
 ]

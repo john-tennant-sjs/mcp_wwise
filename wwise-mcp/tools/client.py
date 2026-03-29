@@ -29,6 +29,7 @@ __all__ = [
     "utc_now",
     "object_exists",
     "get_object_property",
+    "resolve_class_id_for_type",
     "load_contract",
     "validate_response",
 ]
@@ -93,6 +94,18 @@ def get_object_property(client: WaapiClient, ref: str, prop: str):
     )
     if result and result.get("return"):
         return result["return"][0].get(prop)
+    return None
+
+
+def resolve_class_id_for_type(client: WaapiClient, object_type: str) -> int | None:
+    """Map a Wwise type string (e.g. from wwise_get_object \"type\") to classId for getPropertyNames."""
+    result = client.call("ak.wwise.core.object.getTypes", {})
+    if not result or "return" not in result:
+        return None
+    for entry in result["return"]:
+        if entry.get("name") == object_type:
+            cid = entry.get("classId")
+            return int(cid) if cid is not None else None
     return None
 
 
