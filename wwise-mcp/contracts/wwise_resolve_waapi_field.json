@@ -1,0 +1,102 @@
+{
+  "tool": "wwise_resolve_waapi_field",
+  "waapi_uri": "ak.wwise.core.object.getPropertyNames",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "object_type": {
+        "oneOf": [
+          { "type": "string" },
+          { "type": "null" }
+        ]
+      },
+      "user_label": {
+        "oneOf": [
+          { "type": "string" },
+          { "type": "null" }
+        ]
+      },
+      "class_id": {
+        "oneOf": [
+          { "type": "integer" },
+          { "type": "null" }
+        ]
+      },
+      "use_live_validation": {
+        "oneOf": [
+          { "type": "boolean" },
+          { "type": "null" }
+        ]
+      },
+      "dry_run": {
+        "type": "boolean"
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": ["success", "data", "error"],
+    "properties": {
+      "success": { "type": "boolean" },
+      "error": {
+        "type": ["string", "null"]
+      },
+      "data": {
+        "oneOf": [
+          { "type": "null" },
+          {
+            "type": "object",
+            "required": [
+              "waapi_name",
+              "kind",
+              "suggested_tool",
+              "source",
+              "object_type",
+              "class_id"
+            ],
+            "properties": {
+              "waapi_name": { "type": "string" },
+              "kind": {
+                "type": "string",
+                "enum": ["property", "reference"]
+              },
+              "suggested_tool": {
+                "type": "string",
+                "enum": ["wwise_set_property", "wwise_set_reference"]
+              },
+              "source": {
+                "type": "string",
+                "enum": ["alias", "exact_match"]
+              },
+              "object_type": { "type": "string" },
+              "class_id": {
+                "oneOf": [
+                  { "type": "integer" },
+                  { "type": "null" }
+                ]
+              },
+              "alternatives": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": {
+      "waapi_name": "OutputBus",
+      "kind": "reference",
+      "suggested_tool": "wwise_set_reference",
+      "source": "alias",
+      "object_type": "Sound",
+      "class_id": null
+    },
+    "error": null
+  }
+}

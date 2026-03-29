@@ -111,6 +111,13 @@
       "UserAuxSend2",
       "UserAuxSend3"
     ],
+    "display_aliases": {
+      "output bus": { "waapi_name": "OutputBus", "kind": "reference" },
+      "outputbus": { "waapi_name": "OutputBus", "kind": "reference" },
+      "conversion settings": { "waapi_name": "Conversion", "kind": "reference" },
+      "conversion": { "waapi_name": "Conversion", "kind": "reference" },
+      "attenuation": { "waapi_name": "Attenuation", "kind": "reference" }
+    },
     "notes": "Output bus path is reference OutputBus; bus level/HPF/LPF/volume on that route are OutputBusVolume / OutputBusHighpass / OutputBusLowpass (properties). Doc: https://www.audiokinetic.com/en/public-library/2023.1.17_8789/?source=SDK&id=wwiseobject_sound.html"
   },
   "Bus": {
@@ -338,6 +345,13 @@
       "UserAuxSend2",
       "UserAuxSend3"
     ],
+    "display_aliases": {
+      "output bus": { "waapi_name": "OutputBus", "kind": "reference" },
+      "outputbus": { "waapi_name": "OutputBus", "kind": "reference" },
+      "conversion settings": { "waapi_name": "Conversion", "kind": "reference" },
+      "conversion": { "waapi_name": "Conversion", "kind": "reference" },
+      "attenuation": { "waapi_name": "Attenuation", "kind": "reference" }
+    },
     "notes": "Doc: https://www.audiokinetic.com/en/public-library/2023.1.17_8789/?source=SDK&id=wwiseobject_actormixer.html"
   },
   "RandomSequenceContainer": {
@@ -454,6 +468,13 @@
       "UserAuxSend2",
       "UserAuxSend3"
     ],
+    "display_aliases": {
+      "output bus": { "waapi_name": "OutputBus", "kind": "reference" },
+      "outputbus": { "waapi_name": "OutputBus", "kind": "reference" },
+      "conversion settings": { "waapi_name": "Conversion", "kind": "reference" },
+      "conversion": { "waapi_name": "Conversion", "kind": "reference" },
+      "attenuation": { "waapi_name": "Attenuation", "kind": "reference" }
+    },
     "notes": "Doc: https://www.audiokinetic.com/en/public-library/2023.1.17_8789/?source=SDK&id=wwiseobject_randomsequencecontainer.html"
   }
 }

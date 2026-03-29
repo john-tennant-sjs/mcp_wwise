@@ -44,6 +44,7 @@ from . import (
     get_schema,
     get_property_names,
     get_property_and_object_lists,
+    resolve_waapi_field,
     ui_bring_to_foreground,
 )
 
@@ -91,5 +92,6 @@ ALL_TOOLS = [
     get_schema,
     get_property_names,
     get_property_and_object_lists,
+    resolve_waapi_field,
     ui_bring_to_foreground,
 ]

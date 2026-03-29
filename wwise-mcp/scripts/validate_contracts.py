@@ -68,6 +68,7 @@ from tools.paste_properties import wwise_paste_properties
 from tools.get_schema import wwise_get_schema
 from tools.get_property_names import wwise_get_property_names
 from tools.get_property_and_object_lists import wwise_get_property_and_object_lists
+from tools.resolve_waapi_field import wwise_resolve_waapi_field
 from tools.ui_bring_to_foreground import wwise_ui_bring_to_foreground
 from tools.client import validate_response
 
@@ -118,6 +119,7 @@ DRY_RUN_CALLS = [
     ("wwise_get_schema",                  wwise_get_schema,                  {"uri": "ak.wwise.core.object.get", "dry_run": True}),
     ("wwise_get_property_names",          wwise_get_property_names,          {"object_type": "Sound", "dry_run": True}),
     ("wwise_get_property_and_object_lists", wwise_get_property_and_object_lists, {"property_name": "Volume", "object_type": "Sound", "dry_run": True}),
+    ("wwise_resolve_waapi_field",         wwise_resolve_waapi_field,         {"object_type": "Sound", "user_label": "Output Bus", "dry_run": True}),
     ("wwise_ui_bring_to_foreground",      wwise_ui_bring_to_foreground,      {"dry_run": True}),
 ]
 
