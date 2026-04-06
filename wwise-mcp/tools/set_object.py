@@ -20,6 +20,24 @@ def wwise_set_object(objects: list[dict], dry_run: bool = False) -> dict:
     Args:
         objects:  List of dicts, each with "object" + "@property": value pairs.
         dry_run:  If True, skip WAAPI call and return mock response.
+
+    SPECIAL CASE — Assigning effects to buses/sounds:
+    Effect slots cannot be set via wwise_set_reference. Instead use wwise_set_object
+    with an "@Effects" array. Each element must be an EffectSlot object:
+
+        {
+          "object": "<bus-or-sound-guid>",
+          "@Effects": [
+            {
+              "type": "EffectSlot",
+              "name": "",
+              "@Effect": "<effect-preset-guid>"
+            }
+          ]
+        }
+
+    To assign to a specific slot (0–3), use "name": "0" through "name": "3".
+    An empty "name" defaults to slot 0.
     """
     checks = {"pre_check": False, "execute": False, "post_check": False, "schema_match": False}
 

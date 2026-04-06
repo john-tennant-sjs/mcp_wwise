@@ -33,3 +33,6 @@ Thumbs.db
 
 # Local Claude permissions (machine-specific)
 .claude/settings.local.json
+
+# Local agent/dev report (not part of MCP source)
+self-report.md

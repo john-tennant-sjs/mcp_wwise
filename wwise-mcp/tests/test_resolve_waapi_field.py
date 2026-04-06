@@ -6,7 +6,12 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from tools.resolve_waapi_field import normalize_label, wwise_resolve_waapi_field
 
-ROOT = os.path.join(os.path.dirname(__file__), "..", "reference", "wobject_waapi_names_2023_1_17.json")
+REF_DIR = os.path.join(os.path.dirname(__file__), "..", "reference")
+ROOT = os.path.join(REF_DIR, "wobject_waapi_names_2023_1_17.json")
+SNAPSHOTS = [
+    os.path.join(REF_DIR, "wobject_waapi_names_2023_1_17.json"),
+    os.path.join(REF_DIR, "wobject_waapi_names_2025_1_3.json"),
+]
 
 
 def test_normalize_label_collapses_space():
@@ -59,6 +64,45 @@ def test_resolve_unknown_type_offline():
         use_live_validation=False,
     )
     assert not r["success"]
+
+
+def test_resolve_effect0_bus_exact_match():
+    r = wwise_resolve_waapi_field(
+        object_type="Bus",
+        user_label="Effect0",
+        use_live_validation=False,
+    )
+    assert r["success"], r["error"]
+    assert r["data"]["waapi_name"] == "Effect0"
+    assert r["data"]["kind"] == "reference"
+
+
+def test_resolve_effect0_auxbus_exact_match():
+    r = wwise_resolve_waapi_field(
+        object_type="AuxBus",
+        user_label="Effect0",
+        use_live_validation=False,
+    )
+    assert r["success"], r["error"]
+    assert r["data"]["waapi_name"] == "Effect0"
+    assert r["data"]["kind"] == "reference"
+
+
+def test_bundle_reference_target_types_keys_in_reference_names():
+    for path in SNAPSHOTS:
+        if not os.path.isfile(path):
+            continue
+        with open(path, encoding="utf-8") as f:
+            bundle = json.load(f)
+        for type_name, entry in bundle.items():
+            if type_name.startswith("_") or not isinstance(entry, dict):
+                continue
+            rtt = entry.get("reference_target_types") or {}
+            refs = set(entry.get("reference_names") or [])
+            for slot in rtt:
+                assert slot in refs, f"{path} {type_name}: {slot} not in reference_names"
+            for slot, types in rtt.items():
+                assert isinstance(types, list) and types, f"{path} {type_name}.{slot}"
 
 
 def test_bundle_display_aliases_align_with_lists():
