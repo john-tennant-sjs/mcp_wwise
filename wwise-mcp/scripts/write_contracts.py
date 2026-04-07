@@ -175,17 +175,86 @@ CONTRACTS = {
         "properties": {
             "objects": {
                 "type": "array",
-                "items": {"type": "object", "required": ["object"]},
+                "items": {
+                    "type": "object",
+                    "required": ["object"],
+                    "properties": {
+                        "object": {"type": "string"},
+                        "name": {"type": "string"},
+                        "type": {"type": "string"},
+                        "children": {"type": "array"},
+                        "platform": {"oneOf": [{"type": "string"}, {"type": "null"}]},
+                        "notes": {"type": "string"},
+                        "listMode": {"type": "string", "enum": ["replaceAll", "append"]},
+                        "onNameConflict": {"type": "string", "enum": ["rename", "replace", "fail", "merge"]},
+                        "import": {"type": "object"},
+                    },
+                    "patternProperties": {"^@[:_a-zA-Z0-9]+$": {}},
+                    "additionalProperties": False,
+                },
                 "minItems": 1,
             },
             "dry_run": {"type": "boolean"},
+            "strict": {"type": "boolean"},
+            "autofix": {"type": "boolean"},
         },
+        "additionalProperties": False,
     },
     "output_schema": out(NULL_OR({
         "type": "object", "required": ["updated"],
-        "properties": {"updated": {"type": "integer", "minimum": 1}},
+        "properties": {
+            "updated": {"type": "integer", "minimum": 1},
+            "normalizations_applied": {"type": "array", "items": {"type": "string"}},
+            "warnings": {"type": "array", "items": {"type": "string"}},
+        },
     })),
     "mock_response": {"success": True, "data": {"updated": 1}, "error": None},
+},
+
+"wwise_add_rtpc_binding": {
+    "tool": "wwise_add_rtpc_binding",
+    "waapi_uri": "ak.wwise.core.object.set",
+    "input_schema": {
+        "type": "object",
+        "required": ["object_ref", "property_name", "control_input", "points"],
+        "properties": {
+            "object_ref": {"type": "string"},
+            "property_name": {"type": "string"},
+            "control_input": {"type": "string"},
+            "points": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                    "type": "object",
+                    "required": ["x", "y", "shape"],
+                    "properties": {
+                        "x": {"type": "number"},
+                        "y": {"type": "number"},
+                        "shape": {"type": "string"},
+                    },
+                    "additionalProperties": False,
+                },
+            },
+            "rtpc_name": {"type": "string"},
+            "notes": {"oneOf": [{"type": "string"}, {"type": "null"}]},
+            "dry_run": {"type": "boolean"},
+        },
+        "additionalProperties": False,
+    },
+    "output_schema": out(NULL_OR({
+        "type": "object",
+        "required": ["updated", "object_ref", "property_name"],
+        "properties": {
+            "updated": {"type": "integer", "minimum": 1},
+            "object_ref": {"type": "string"},
+            "property_name": {"type": "string"},
+        },
+    })),
+    "mock_response": {
+        "success": True,
+        "data": {"updated": 1, "object_ref": MOCK_ID, "property_name": "OutputBusVolume"},
+        "error": None,
+    },
 },
 
 "wwise_copy_object": {

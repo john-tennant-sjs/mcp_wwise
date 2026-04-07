@@ -1,0 +1,121 @@
+{
+  "tool": "wwise_add_rtpc_binding",
+  "waapi_uri": "ak.wwise.core.object.set",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "object_ref",
+      "property_name",
+      "control_input",
+      "points"
+    ],
+    "properties": {
+      "object_ref": {
+        "type": "string"
+      },
+      "property_name": {
+        "type": "string"
+      },
+      "control_input": {
+        "type": "string"
+      },
+      "points": {
+        "type": "array",
+        "minItems": 2,
+        "items": {
+          "type": "object",
+          "required": [
+            "x",
+            "y",
+            "shape"
+          ],
+          "properties": {
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            },
+            "shape": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "rtpc_name": {
+        "type": "string"
+      },
+      "notes": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "dry_run": {
+        "type": "boolean"
+      }
+    },
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "success",
+      "data",
+      "error"
+    ],
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "updated",
+              "object_ref",
+              "property_name"
+            ],
+            "properties": {
+              "updated": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "object_ref": {
+                "type": "string"
+              },
+              "property_name": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": {
+      "updated": 1,
+      "object_ref": "{AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE}",
+      "property_name": "OutputBusVolume"
+    },
+    "error": null
+  }
+}

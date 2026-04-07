@@ -28,6 +28,8 @@ mcp = FastMCP(
         "structured child objects, not a flat reference.\n\n"
         "When in doubt: if setReference returns a type-mismatch error, the property "
         "likely requires the object.set array pattern instead.\n\n"
+        "For RTPC authoring, prefer wwise_add_rtpc_binding over raw wwise_set_object when possible. "
+        "It builds a validated object.set payload with @RTPC, @PropertyName, @ControlInput, and @Curve.points.\n\n"
         "Output bus routing on Sound uses the reference name \"OutputBus\" (see reference bundle notes). "
         "OutputBus references only work against a Bus type, not AuxBus.\n\n"
         "Effects — always assign effects with wwise_set_object (ak.wwise.core.object.set). Do not use "

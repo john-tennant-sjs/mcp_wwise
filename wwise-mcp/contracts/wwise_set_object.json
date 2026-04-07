@@ -13,14 +13,71 @@
           "type": "object",
           "required": [
             "object"
-          ]
+          ],
+          "properties": {
+            "object": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "children": {
+              "type": "array"
+            },
+            "platform": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "notes": {
+              "type": "string"
+            },
+            "listMode": {
+              "type": "string",
+              "enum": [
+                "replaceAll",
+                "append"
+              ]
+            },
+            "onNameConflict": {
+              "type": "string",
+              "enum": [
+                "rename",
+                "replace",
+                "fail",
+                "merge"
+              ]
+            },
+            "import": {
+              "type": "object"
+            }
+          },
+          "patternProperties": {
+            "^@[:_a-zA-Z0-9]+$": {}
+          },
+          "additionalProperties": false
         },
         "minItems": 1
       },
       "dry_run": {
         "type": "boolean"
+      },
+      "strict": {
+        "type": "boolean"
+      },
+      "autofix": {
+        "type": "boolean"
       }
-    }
+    },
+    "additionalProperties": false
   },
   "output_schema": {
     "type": "object",
@@ -50,6 +107,18 @@
               "updated": {
                 "type": "integer",
                 "minimum": 1
+              },
+              "normalizations_applied": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "warnings": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
               }
             }
           },

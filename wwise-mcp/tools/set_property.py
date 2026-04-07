@@ -4,7 +4,15 @@ Set a single property on a Wwise object and verify it was applied.
 """
 
 from __future__ import annotations
-from .client import connect, object_exists, get_object_property, write_phase2_log, validate_response, get_mock_response
+from .client import (
+    connect,
+    object_exists,
+    get_object_property,
+    write_phase2_log,
+    validate_input,
+    validate_response,
+    get_mock_response,
+)
 
 WAAPI_URI = "ak.wwise.core.object.setProperty"
 TOOL_NAME = "wwise_set_property"
@@ -34,6 +42,19 @@ def wwise_set_property(
         err = "object_ref and property_name are required."
         write_phase2_log(TOOL_NAME, WAAPI_URI, checks, False, err)
         return {"success": False, "data": None, "error": err}
+    ok, verr = validate_input(
+        TOOL_NAME,
+        {
+            "object_ref": object_ref,
+            "property_name": property_name,
+            "value": value,
+            "platform": platform,
+            "dry_run": dry_run,
+        },
+    )
+    if not ok:
+        write_phase2_log(TOOL_NAME, WAAPI_URI, checks, False, verr)
+        return {"success": False, "data": None, "error": verr}
     checks["pre_check"] = True
 
     if dry_run:

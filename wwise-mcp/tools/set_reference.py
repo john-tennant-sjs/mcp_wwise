@@ -10,6 +10,7 @@ from .client import (
     get_mock_response,
     object_exists,
     resolve_class_id_for_type,
+    validate_input,
     validate_response,
     write_phase2_log,
 )
@@ -41,6 +42,19 @@ def wwise_set_reference(
         err = "object_ref and reference are required."
         write_phase2_log(TOOL_NAME, WAAPI_URI, checks, False, err)
         return {"success": False, "data": None, "error": err}
+    ok, verr = validate_input(
+        TOOL_NAME,
+        {
+            "object_ref": object_ref,
+            "reference": reference,
+            "value": value,
+            "platform": platform,
+            "dry_run": dry_run,
+        },
+    )
+    if not ok:
+        write_phase2_log(TOOL_NAME, WAAPI_URI, checks, False, verr)
+        return {"success": False, "data": None, "error": verr}
     checks["pre_check"] = True
 
     if dry_run:

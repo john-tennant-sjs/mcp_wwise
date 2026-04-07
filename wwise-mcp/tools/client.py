@@ -31,6 +31,7 @@ __all__ = [
     "get_object_property",
     "resolve_class_id_for_type",
     "load_contract",
+    "validate_input",
     "validate_response",
 ]
 
@@ -135,6 +136,23 @@ def validate_response(tool_name: str, response: dict) -> tuple[bool, str | None]
         return True, None
     except jsonschema.ValidationError as e:
         return False, f"schema violation: {e.message} at {list(e.absolute_path)}"
+    except FileNotFoundError:
+        return False, f"contract file not found for {tool_name}"
+    except Exception as e:
+        return False, str(e)
+
+
+def validate_input(tool_name: str, args: dict) -> tuple[bool, str | None]:
+    """
+    Validate a tool input dict against its contract's input_schema.
+    Returns (ok: bool, error_message: str | None).
+    """
+    try:
+        contract = load_contract(tool_name)
+        jsonschema.validate(args, contract["input_schema"])
+        return True, None
+    except jsonschema.ValidationError as e:
+        return False, f"input schema violation: {e.message} at {list(e.absolute_path)}"
     except FileNotFoundError:
         return False, f"contract file not found for {tool_name}"
     except Exception as e:
