@@ -4,22 +4,22 @@ overview: Prepare `MCP_Wwise_Project` to be safely published as an MIT-licensed 
 todos:
   - id: shape-repo
     content: Decide the public repo layout and whether `wwise-mcp/` or the repo root is the primary package surface
-    status: pending
+    status: completed
   - id: privacy-cleanup
-    content: Remove or ignore personal workspace/editor/planning artifacts and sanitize private absolute paths
-    status: pending
+    content: Add to .gitignore personal workspace/editor/planning artifacts; stop tracking sensitive files (keep locally)
+    status: completed
   - id: test-portability
-    content: Refactor tests and setup docs so they do not depend on `T:\MCP_Wwise_Project\MCP_Wwise_Playground` hardcoded paths
-    status: pending
+    content: Refactor tests and setup docs so they do not depend on hardcoded playground paths
+    status: completed
   - id: public-docs
     content: Add MIT `LICENSE`, root `README.md`, dependency metadata, and contributor-facing docs
-    status: pending
+    status: completed
   - id: history-audit
     content: Review git history for sensitive content before changing the GitHub repo from private to public
     status: pending
   - id: release-hygiene
     content: Add GitHub templates/CI, smoke-test the repo from a clean environment, and prepare the first public tag
-    status: pending
+    status: in_progress
 isProject: false
 ---
 
@@ -42,9 +42,10 @@ Turn the current private repo into a public, MIT-licensed GitHub project that is
 - Decide whether the repo root should stay a workspace/umbrella repo or whether `wwise-mcp` should become the visible primary package. If you keep the current layout, the root `README.md` should make that structure explicit.
 - Keep `MCP_Wwise_Playground/` private/local and document it as an optional local test fixture, not part of the open-source deliverable.
 
-### 2. Remove or exclude private/personal artifacts
+### 2. Exclude private/personal artifacts
 
-- Remove or stop tracking [T:\MCP_Wwise_Project\MCP_Wwise_Project.code-workspace](T:\MCP_Wwise_Project\MCP_Wwise_Project.code-workspace), which currently contains personal paths:
+- **Done:** `MCP_Wwise_Project.code-workspace` and root `plan.md` are no longer tracked (`git rm --cached …`); both stay on disk. `plan.md` is listed in `.gitignore`; `*.code-workspace` is ignored.
+- Reference (why the workspace was sensitive) — it contained personal paths:
 
 ```6:11:T:\MCP_Wwise_Project\MCP_Wwise_Project.code-workspace
 		{
@@ -55,7 +56,7 @@ Turn the current private repo into a public, MIT-licensed GitHub project that is
 		}
 ```
 
-- Remove or rewrite [T:\MCP_Wwise_Project\plan.md](T:\MCP_Wwise_Project\plan.md) before publishing. It contains internal planning language and absolute machine-specific paths such as `T:\MCP_Wwise_Project\...`.
+- Rewrite [T:\MCP_Wwise_Project\plan.md](T:\MCP_Wwise_Project\plan.md) before publishing. It contains internal planning language and absolute machine-specific paths such as `T:\MCP_Wwise_Project\...`.
 - Ensure internal agent/editor artifacts are not tracked going forward, especially `.cursor/` content and any machine-local AI settings.
 - Reconfirm that [T:\MCP_Wwise_Projectclaude\settings.local.json](T:\MCP_Wwise_Project.claude\settings.local.json) is untracked.
 
@@ -82,10 +83,10 @@ ORIGINALS_SFX = "T:\\MCP_Wwise_Project\\MCP_Wwise_Playground\\Originals\\SFX"
   - who it is for,
   - that it requires Wwise plus WAAPI access,
   - how to install and run it,
-  - how to connect it from MCP clients,
+  - how to connect to it from MCP clients,
   - how local/live testing works,
   - what is intentionally not included in the repo.
-- Add Python package/dependency metadata if it is missing. Right now there is no `pyproject.toml` or `requirements.txt` at the repo level from the current scan.
+
 - Add `CONTRIBUTING.md` with a lightweight workflow for issues, PRs, local setup, and test expectations.
 - Add a short `CHANGELOG.md` or start using GitHub releases from the first public tag.
 
@@ -109,7 +110,6 @@ Transport: stdio (local only).
 - Use the MIT License as planned.
 - In the README, clearly state that the server integrates with Audiokinetic Wwise via WAAPI and that users need their own valid Wwise installation/license as applicable.
 - Avoid bundling proprietary Wwise assets, generated project data, or anything that should not be redistributed.
-- If you include reference snapshots or schemas derived from Wwise docs, double-check that they are acceptable to redistribute.
 
 ### 7. Audit commit history before going public
 
@@ -158,4 +158,20 @@ Transport: stdio (local only).
 - The main technical risk is not the license; it is publishing a repo that still assumes your exact machine layout.
 - The main legal/communication risk is being unclear about the Wwise dependency and what parts of the toolchain are proprietary vs yours.
 - The main reputational risk is weak first-run documentation; for a niche integration project, the README matters almost as much as the code.
+
+## Execution notes (2026)
+
+What was done:
+
+- **`.gitignore`**: Expanded to ignore `*.code-workspace`, `.cursor/`, `agent-transcripts/`, local AI tool dirs, and **`plan.md`**. `MCP_Wwise_Playground/` was already ignored.
+- **Stop tracking, keep local**: Ran `git rm --cached MCP_Wwise_Project.code-workspace plan.md` so they no longer ship in the repo; files remain on disk. `plan.md` is explicitly listed in `.gitignore` so it is not re-added by mistake.
+- **Tests**: `wwise-mcp/tests/test_import_audio.py` uses env var `WWISE_ORIGINALS_SFX` for the Originals/SFX folder; the import-audio integration test **skips** when unset. Documented in `CONTRIBUTING.md`.
+- **OSS files**: Root `LICENSE` (MIT), `CONTRIBUTING.md`, `wwise-mcp/requirements-dev.txt`; root `README.md` updated with quickstart, stdio MCP client note, prerequisites, and license pointer.
+- **GitHub**: Issue template (`bug_report`), PR template, and `.github/workflows/ci.yml` (Ubuntu, Python 3.11, `pip install` + `pytest` in `wwise-mcp/`).
+
+Still to do before going public:
+
+- **History audit** (step 7): `plan.md` and the workspace file may still exist in **old commits**; consider `git filter-repo`/BFG or a fresh public history if that matters.
+- **`release-hygiene`**: Run a clean clone smoke test; tag e.g. `v0.1.0` when ready. Optional: `CHANGELOG.md` or GitHub Releases only.
+- **CI caveat**: Full pytest may need Wwise/live WAAPI for some tests; if CI fails on integration tests, split markers or skip rules may be needed next.
 

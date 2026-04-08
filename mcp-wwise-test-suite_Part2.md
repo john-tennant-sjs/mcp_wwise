@@ -2,7 +2,7 @@
 
 This document is the continuation of `mcp-wwise-test-suite.md` (Part 1).
 
-It targets WAAPI-related capabilities that Part 1 did not exercise: schema inspection, notes, undo groups, paste-properties, declarative object authoring, attenuation curves, Switch Container assignments, UI commands, log inspection, audio import, and object deletion.
+It targets WAAPI-related capabilities that Part 1 did not exercise: schema inspection, notes, undo groups, paste-properties, declarative object authoring, effect sharesets and RTPC on plug-in properties, attenuation curves, Switch Container assignments, UI commands, log inspection, audio import, and object deletion.
 
 **Tool names** in this file (for example `wwise_get_schema`, `wwise_paste_properties`) follow the reference **mcp-wwise** server naming. Other Wwise MCP implementations should map each mention to the equivalent tool on that server.
 
@@ -34,7 +34,7 @@ Complete **Part 1** (`mcp-wwise-test-suite.md`) first so the test hierarchy exis
 
 ## Mission For The AI Agent
 
-Work through all 11 prompts in order. For every prompt:
+Work through all 14 prompts in order. For every prompt:
 
 - Execute the authoring or inspection task.
 - Perform at least one self-validation step using read-only inspection tools after every mutation.
@@ -217,7 +217,91 @@ Re-query `\Actor-Mixer Hierarchy\MCP_Test\Templates\Metal_Template` and confirm:
 
 ---
 
-## Prompt 6: Attenuation Curve Read And Write
+## Prompt 6: Create A Test Effect Preset
+
+```text
+We're trying to show how MCP can set up a simple effect chain without touching the UI much. Could you create a new Effect shareset somewhere under the project's Effects hierarchy — pick any built‑in Audiokinetic effect you're comfortable with (EQ, Compressor, Gain, Wwise Meter… doesn't matter) — and name it clearly for the suite, e.g. `MCP_Test_Effect`? I only need the preset to exist as something we can slot onto a voice later; no need to obsess over parameter values.
+```
+
+### Goal
+
+Verify Effect shareset creation via WAAPI and hierarchy discovery under `\Effects` (or the equivalent path in this project).
+
+### Target tools (reference names)
+
+- `wwise_create_object`, `wwise_get_object` (validation after create; resolve parent path by query first)
+
+### Expected Coverage
+
+- Discovering the correct parent folder for Effect sharesets
+- Creating an Effect object of a supported plug‑in type
+
+### Minimum Self-Validation
+
+Re-query the new object by path or id and confirm:
+- type is Effect (or the tool-reported equivalent)
+- name matches what was requested
+- the object is reachable from the Effects hierarchy you used
+
+---
+
+## Prompt 7: Assign The Effect To Metal_Template
+
+```text
+That `Metal_Template` Sound we authored under `\Actor-Mixer Hierarchy\MCP_Test\Templates` — can you put the effect preset you just made (`MCP_Test_Effect` or whatever you named it) on it in the first effect slot? In the mixer I'd just drag it onto the Effects list; here I need you to do the Wwise‑correct thing with whatever tools you have (set_object / setReference — follow your server's docs, don't guess field names). After you're done, read the sound back and make sure the effect is really hooked up, not just that the call returned OK.
+```
+
+### Goal
+
+Verify assigning an Effect shareset to a Sound's effect chain using the supported API pattern for this server (commonly `wwise_set_object` with an `@Effects` array of `EffectSlot` entries — confirm via schema / property names first).
+
+### Target tools (reference names)
+
+- `wwise_set_object` or equivalent, `wwise_get_object`, optional `wwise_get_property_names`, `wwise_get_schema`
+
+### Expected Coverage
+
+- Effect slot assignment on an existing Sound from an earlier prompt
+- Read‑back verification of the effect chain or effect slot children
+
+### Minimum Self-Validation
+
+Re-query `Metal_Template` (and, if your tools expose them, the EffectSlot child objects) and confirm:
+- at least one effect slot references or contains the intended Effect shareset
+- guides / server instructions for Effects were followed (`@Effects`, `EffectSlot` shape, etc.)
+
+---
+
+## Prompt 8: Game Parameter And RTPC On Effect Bypass (0–1)
+
+```text
+For tuning I'd like a single slider in game: add a Game Parameter with min 0 and max 1 — call it something like `MCP_EffectBypassTest` — and use it to drive the Bypass on the effect you put on `Metal_Template`. At 0 the effect should stay in the signal path (not bypassed); at 1 it should be fully bypassed. Use a two‑point RTPC curve if that's what Wwise expects. Prefer your server's RTPC helper if it has one; otherwise use object.set with the documented `@RTPC` / `@PropertyName` / `@ControlInput` / `@Curve` / `points` shape. Validate by reading back the binding from the object that actually owns the RTPC list (often the Effect slot, not the Sound).
+```
+
+### Goal
+
+Verify Game Parameter authoring with a bounded range and an RTPC curve on a plug‑in property (`Bypass`), including the common pitfall that the RTPC may live on the **EffectSlot** child rather than on the parent Sound.
+
+### Target tools (reference names)
+
+- `wwise_create_object` (Game Parameter), `wwise_add_rtpc_binding` if available, else `wwise_set_object`, `wwise_get_object` (read back `@RTPC` or equivalent on the correct object)
+
+### Expected Coverage
+
+- Game Parameter with min 0, max 1
+- RTPC curve points consistent with bypass off at input 0 and bypass on at input 1
+- Correct target object for the RTPC list (EffectSlot vs Sound)
+
+### Minimum Self-Validation
+
+Confirm by query:
+- the Game Parameter exists with min 0 and max 1 (or the closest Wwise representation; report raw values)
+- an RTPC entry exists for property `Bypass` (or canonical name from property list) on the effect slot or as documented by WAAPI
+- curve has at least two points matching the intended mapping (0 → bypass off, 1 → bypass on — within normal float/winding conventions for Bypass)
+
+---
+
+## Prompt 9: Attenuation Curve Read And Write
 
 ```text
 Do the following attenuation curve workflow:
@@ -256,7 +340,7 @@ If the Attenuations hierarchy path is different in this project, discover the co
 
 ---
 
-## Prompt 7: Switch Container Assignments
+## Prompt 10: Switch Container Assignments
 
 ```text
 Do the following Switch Container workflow:
@@ -298,7 +382,7 @@ Switch Group paths vary by project. Query `\Switch Groups` or `\Switch Groups\De
 
 ---
 
-## Prompt 8: UI Commands And Foreground
+## Prompt 11: UI Commands And Foreground
 
 ```text
 Do the following UI operations:
@@ -336,7 +420,7 @@ Use `wwise_get_schema` or check the WAAPI documentation reference to discover va
 
 ---
 
-## Prompt 9: Log Inspection
+## Prompt 12: Log Inspection
 
 ```text
 Retrieve the Wwise WAAPI log using wwise_log_get. Report:
@@ -372,7 +456,7 @@ Confirm that:
 
 ---
 
-## Prompt 10: Import Audio
+## Prompt 13: Import Audio
 
 ```text
 Locate an available .wav file for import using only portable discovery — in this order:
@@ -413,7 +497,7 @@ This prompt is explicitly contingent on a suitable file being present. Do not fa
 
 ---
 
-## Prompt 11: Selective Cleanup With Delete
+## Prompt 14: Selective Cleanup With Delete
 
 ```text
 Clean up temporary objects that are no longer needed after Part 2 testing, but only if they exist (resolve paths by query first):
@@ -465,6 +549,8 @@ When reviewing a Part 2 run, pay attention to (using your server’s equivalent 
 - Did undo group cancel actually roll back the change, and did the agent verify rather than assume?
 - Did `wwise_paste_properties` copy the expected fields, and did the agent report which fields were included?
 - Did `wwise_set_object` produce the correct property values in a single call?
+- Were Effect sharesets created and assigned using the correct `@Effects` / EffectSlot pattern rather than guessed `setReference` field names?
+- Was the RTPC for Bypass attached to the object that actually owns the RTPC list (typically the EffectSlot), with `@`-prefixed WAAPI keys and lowercase `points` in curves where required?
 - Were attenuation curve control points read and written in the correct format?
 - Did Switch Container assignments survive a get-assignments read-back?
 - Did the agent surface any log warnings that might indicate silent failures in Part 1?

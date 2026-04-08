@@ -1,6 +1,9 @@
 # Local Wwise authoring project (not part of MCP source)
 MCP_Wwise_Playground/
 
+# Local workspace files (machine-specific)
+*.code-workspace
+
 # Python
 __pycache__/
 *.py[cod]
@@ -36,3 +39,14 @@ Thumbs.db
 
 # Local agent/dev report (not part of MCP source)
 self-report.md
+
+# Internal build plan (machine-specific paths); keep locally only
+plan.md
+
+# Cursor / agent artifacts (keep local)
+.cursor/
+agent-transcripts/
+
+# Local AI tools (machine-specific)
+.gemini/
+Claude/

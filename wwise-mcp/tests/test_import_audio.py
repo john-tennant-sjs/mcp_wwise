@@ -7,8 +7,7 @@ from waapi import WaapiClient
 from tools.import_audio import wwise_import_audio
 from tests.conftest import TEST_PARENT, WAAPI_URL
 
-# Correct Originals path for this project
-ORIGINALS_SFX = "T:\\MCP_Wwise_Project\\MCP_Wwise_Playground\\Originals\\SFX"
+ORIGINALS_SFX = os.getenv("WWISE_ORIGINALS_SFX")
 
 
 def _make_wav(path: str) -> None:
@@ -30,6 +29,8 @@ def _delete_object(ref: str) -> None:
 @pytest.fixture
 def temp_wav():
     """Create a temp WAV in the project's Originals/SFX folder."""
+    if not ORIGINALS_SFX:
+        pytest.skip("Set WWISE_ORIGINALS_SFX to run import-audio integration tests.")
     wav_path = os.path.join(ORIGINALS_SFX, "_test_import.wav")
     _make_wav(wav_path)
     yield wav_path

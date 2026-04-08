@@ -1,8 +1,43 @@
-# MCP_Wwise_Project
+# wwise-mcp (MCP server for Wwise/WAAPI)
 
-MCP server tooling for controlling Audiokinetic Wwise through WAAPI, with a strong focus on **safe, schema-validated automation** for AI agents.
+MCP server tooling for controlling **Audiokinetic Wwise Authoring** through **WAAPI**, with a strong focus on **safe, schema-validated automation** for AI agents.
 
 This repository exists because raw WAAPI payload authoring is easy to get wrong, especially for complex `ak.wwise.core.object.set` operations (RTPCs, Effects lists, nested objects). The goal is to make agent-driven changes reliable, explainable, and testable.
+
+## Quickstart
+
+### Prerequisites
+
+- Wwise Authoring installed
+- WAAPI enabled in Wwise (websocket)
+
+### Install
+
+```bash
+cd wwise-mcp
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### Run (stdio)
+
+```bash
+cd wwise-mcp
+python server.py
+```
+
+## Using it from an MCP client
+
+This server uses **stdio transport** (local process). Configure your MCP client to launch `python server.py` from the `wwise-mcp/` directory.
+
+## What’s intentionally not included
+
+- Any Wwise project content. A local playground project is expected for live testing, and should remain untracked (see `MCP_Wwise_Playground/` in `.gitignore`).
+
+## License
+
+MIT. See `LICENSE`.
 
 ## Why this project emphasizes schema validation
 

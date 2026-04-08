@@ -1,14 +1,18 @@
 # MCP-Wwise Autonomous Test Suite
 
-This document is a progressive overnight test runbook for a **Wwise MCP server** (any implementation that exposes WAAPI to an MCP host) in an empty Wwise project.
+This document is a progressive test runbook for a **Wwise MCP server** (any implementation that exposes WAAPI to an MCP host) in an empty Wwise project.
 
-It is designed for an AI agent connected through an MCP client (for example Claude Desktop, Cursor, or another host) to execute with minimal user intervention. The prompts begin with simple connectivity and object-authoring tasks, then build toward more complex hierarchy duplication and event retargeting workflows.
+It is designed for an AI agent connected through an MCP client (for example Claude Desktop, Cursor, or another host) to execute with minimal user intervention. 
+
+Part 1 (this doc): The prompts begin with simple connectivity and object-authoring tasks, then build toward more complex hierarchy duplication and event retargeting workflows. Mostly content-authoring focused. 
+
+Part 2 (mcp-wwise-test-suite_Part2.md): targets WAAPI-related capabilities that Part 1 does not exercise. 
 
 ## Portability
 
 - **No machine-specific filesystem paths** appear in this document. Paths that look like `\Actor-Mixer Hierarchy\...` or `\Events\...` are **Wwise Project Explorer paths** (Wwise’s own hierarchy notation), not Windows or Unix paths.
 - **Tool names** such as `wwise_get_object` or `wwise_set_property` match the reference **mcp-wwise** server in this repository. If your server uses different tool identifiers, map each prompt to the equivalent tool that performs the same WAAPI operation.
-- **`self-report.md`**: write it to the **workspace or repository root** your MCP host allows the agent to edit, or to any path the user specifies at the start of the run. Do not assume a particular drive letter or OS.
+- `**self-report.md`**: write it to the **workspace or repository root** your MCP host allows the agent to edit, or to any path the user specifies at the start of the run. Do not assume a particular drive letter or OS.
 - **Wwise version**: behavior may vary slightly by authoring version; discovery tools (`get_property_names`, `get_schema`, etc., or your server’s equivalents) should be used when defaults differ.
 
 ## Mission For The AI Agent
@@ -29,7 +33,7 @@ At the end of the full run, create a file named `self-report.md` (see **Portabil
 
 The agent must create:
 
-- `self-report.md` in a writable project or workspace root (or a path given by the user when starting the run). 
+- `self-report.md` in a writable project or workspace root (or a path given by the user when starting the run).
 
 The report should contain:
 
@@ -485,3 +489,4 @@ The suggestions should be based on what happened during the overnight run, not j
 - Add a suite for Switch Containers, States, and assignment workflows.
 - Add a suite for SoundBank inclusion authoring.
 - Add a suite specifically for negative tests, such as invalid display labels or ambiguous target names.
+
