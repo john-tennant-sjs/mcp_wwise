@@ -1,0 +1,4 @@
+# MCP server runtime (match versions used for local dev)
+fastmcp>=3.2.0
+pywwise>=0.2.4
+jsonschema>=4.26.0
