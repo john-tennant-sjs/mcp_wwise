@@ -1,4 +1,4 @@
-# wwise-mcp
+# mcp-wwise
 
 An MCP server for **Audiokinetic Wwise**, providing schema-validated, safety-first WAAPI automation for AI agents and programmatic workflows.
 
