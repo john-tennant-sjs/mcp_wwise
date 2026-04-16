@@ -1,143 +1,143 @@
-# wwise-mcp (MCP server for Wwise/WAAPI)
+# wwise-mcp
 
-MCP server tooling for controlling **Audiokinetic Wwise Authoring** through **WAAPI**, with a strong focus on **safe, schema-validated automation** for AI agents.
+An MCP server for **Audiokinetic Wwise**, providing schema-validated, safety-first WAAPI automation for AI agents and programmatic workflows.
 
-This repository exists because raw WAAPI payload authoring is easy to get wrong, especially for complex `ak.wwise.core.object.set` operations (RTPCs, Effects lists, nested objects). The goal is to make agent-driven changes reliable, explainable, and testable.
+Wwise is the dominant middleware for interactive audio in games and media. Its scripting interface (WAAPI) is powerful but unforgiving: small payload mistakes — wrong key casing, missing prefixes, choosing the wrong API for a given field type — produce opaque failures. This server wraps WAAPI in 46 validated tools so that AI assistants and automation scripts can create, inspect, and modify Wwise project content reliably without hand-authoring raw JSON payloads.
 
-## Quickstart
+[MCP](https://modelcontextprotocol.io/) (Model Context Protocol) is an open standard that lets AI assistants call external tools over a structured interface. Any MCP-compatible host — Claude Desktop, Cursor, VS Code, or others — can connect to this server and operate a running Wwise instance through it.
+
+## Design philosophy
+
+**Schema validation over guesswork.** Every tool has a JSON contract defining its input schema, output schema, and a mock response for dry-run testing. Malformed requests fail fast with actionable error messages before they reach Wwise.
+
+**Semantic preflight checks.** High-risk operations like `object.set` are inspected before execution. The server catches common mistakes — missing `@` prefixes on settable fields, incorrect key casing, ambiguous payload shapes — and returns specific guidance rather than forwarding a payload that will silently fail.
+
+**Display-name resolution.** Users and AI agents think in Wwise UI labels ("Output Bus", "Pitch"). The server resolves these to canonical WAAPI identifiers before making calls, using a combination of live introspection (`getPropertyNames`) and a bundled offline reference snapshot. This eliminates the retry loops that occur when an agent guesses at field name spellings.
+
+**Safety by default.** Strict mode rejects suspicious payloads. An optional autofix mode normalizes safe, obvious mistakes and reports what was changed. Every mutation is verified by reading back the affected object.
+
+## Capabilities
+
+The server exposes 46 tools organized around the core WAAPI surface:
+
+| Area | Tools |
+|------|-------|
+| Object authoring | Create, delete, copy, move, rename, set notes, declarative batch set |
+| Properties and references | Set/get scalar properties, set references, paste properties between objects |
+| Field resolution | Resolve display names to WAAPI identifiers, list valid property names, enumerate allowed values |
+| Events and actions | Create events, inspect action targets, retarget after duplication |
+| Containers | Switch Container assignment add/get/remove |
+| Audio | Import audio files, manage attenuation curves |
+| SoundBanks | Get/set bank inclusions, generate banks |
+| Transport and profiler | Create/destroy transports, play/stop, capture profiler data, voice contributions |
+| Project | Save, undo groups (begin/end/cancel), schema introspection, log retrieval |
+| UI automation | Bring Wwise to foreground, execute UI commands, read selection state |
+
+Each tool follows the same pattern: input validation against its contract, pre-check for object existence, WAAPI call, post-check read-back, and response validation against its output contract.
+
+## Setup
 
 ### Prerequisites
 
-- Wwise Authoring installed
-- WAAPI enabled in Wwise (websocket)
+- Python 3.12+
+- Wwise Authoring with WAAPI enabled (Project Settings > Allow communication via WAAPI)
+- Tested with Wwise 2023.1.17 and 2025.1.3
 
 ### Install
 
 ```bash
 cd wwise-mcp
 python -m venv .venv
+```
+
+Activate the virtual environment:
+
+```bash
+# Windows
 .venv\Scripts\activate
+
+# macOS / Linux
+source .venv/bin/activate
+```
+
+Install dependencies:
+
+```bash
 pip install -r requirements.txt
 ```
 
-### Run (stdio)
+### Run
 
 ```bash
-cd wwise-mcp
 python server.py
 ```
 
-## Using it from an MCP client
+The server uses **stdio transport** (local process, no network exposure).
 
-This server uses **stdio transport** (local process). Configure your MCP client to launch `python server.py` from the `wwise-mcp/` directory.
+### Connect from an MCP client
 
-## What’s intentionally not included
+Configure your MCP host to launch `python server.py` from the `wwise-mcp/` directory. For example, in Claude Desktop's `claude_desktop_config.json`:
 
-- Any Wwise project content. A local playground project is expected for live testing, and should remain untracked (see `MCP_Wwise_Playground/` in `.gitignore`).
+```json
+{
+  "mcpServers": {
+    "wwise": {
+      "command": "python",
+      "args": ["server.py"],
+      "cwd": "/path/to/wwise-mcp"
+    }
+  }
+}
+```
 
-## License
+Cursor, VS Code, and other MCP hosts use similar configuration. Adjust `cwd` (or `command`) to match your local checkout.
 
-MIT. See `LICENSE`.
-
-## Why this project emphasizes schema validation
-
-LLMs are good at patterns, but WAAPI authoring has sharp edges:
-
-- Similar-looking structures from different layers (Wwise WWU XML vs WAAPI JSON) are not interchangeable.
-- `object.set` payloads mix structural keys (`object`, `type`, `name`) with WAAPI-settable fields that require `@` prefixes (`@RTPC`, `@PropertyName`, `@ControlInput`, `@Curve`).
-- Small casing differences break calls (`points` vs `Points`).
-- WAAPI may return generic failures (`None`) without enough context unless the server adds diagnostics.
-
-In practice, common failures include:
-
-- Missing top-level `objects` wrapper for `object.set`.
-- Forgetting `@` on settable fields (for example `PropertyName` instead of `@PropertyName`).
-- Using values copied from docs/examples that are syntactically close but invalid for the active WAAPI schema.
-- Choosing the wrong tool (`setReference` when `set` list/object composition is required).
-
-This server adds guardrails so these errors are caught early with actionable messages.
-
-## Repository structure
-
-- `wwise-mcp/server.py`  
-  MCP entrypoint and instruction layer for agents.
-
-- `wwise-mcp/tools/`  
-  One Python module per MCP tool (`get`, `set`, references, profiler, transport, etc).
-
-- `wwise-mcp/contracts/`  
-  JSON contracts for each tool:
-  - `input_schema` (what callers may send)
-  - `output_schema` (what tool returns)
-  - mock responses for dry-run/testing flows
-
-- `wwise-mcp/scripts/write_contracts.py`  
-  Generates/synchronizes contract files.
-
-- `wwise-mcp/reference/`  
-  Offline WAAPI name snapshots and notes (fallback when live WAAPI lookup is unavailable).
-
-- `wwise-mcp/tests/`  
-  Pytest suite for behavior and regressions.
-
-## Guardrail model (how safety is layered)
-
-### 1) Input contract validation (before WAAPI call)
-
-Tools validate input against contract schemas, so malformed requests fail fast before touching Wwise.
-
-### 2) Semantic preflight checks
-
-For complex operations like `wwise_set_object`, preflight checks detect likely intent errors:
-
-- missing `@` prefixes on settable fields
-- suspicious unknown keys in object payloads
-- common curve-shape mistakes (`Points` -> `points`)
-
-### 3) Optional normalization/autofix
-
-`wwise_set_object` supports:
-
-- `strict` (default true): reject ambiguous or suspicious payloads
-- `autofix` (default false): normalize safe, obvious mistakes and report what was rewritten
-
-### 4) Runtime diagnostics
-
-If WAAPI still rejects a call, tool responses include likely-cause guidance and suggested fixes.
-
-### 5) Helper tools for complex workflows
-
-When raw payload authoring is too brittle, helper tools provide typed operations.  
-Example: `wwise_add_rtpc_binding` builds a valid RTPC payload (`@RTPC`, `@PropertyName`, `@ControlInput`, `@Curve.points`) so callers do not handcraft nested `object.set` JSON.
-
-## Key design principle: WAAPI schema is source of truth
-
-When docs, examples, and project XML differ, use the live WAAPI schema (`ak.wwise.waapi.getSchema`) and tool contracts as canonical validation targets.
-
-This is especially important for:
-
-- deciding when `@` prefixes are required
-- determining valid key names and nested object shapes
-- avoiding layer confusion between WWU serialization and WAAPI payloads
-
-## Typical workflow for contributors
-
-1. Implement or update tool logic in `wwise-mcp/tools/`.
-2. Update contract definitions in `wwise-mcp/contracts/` (and generator if needed).
-3. Add/adjust tests in `wwise-mcp/tests/`.
-4. Run test suite:
+### Run tests
 
 ```bash
 cd wwise-mcp
 pytest tests
 ```
 
-## Current direction
+Dry-run tests (contract validation, mock responses) work without a running Wwise instance. Live tests require Wwise Authoring to be open with a project loaded.
 
-The project is intentionally evolving toward:
+## Repository structure
 
-- stronger preflight validation for high-risk tools
-- better error UX for agent users
-- more high-level helper tools for recurring WAAPI tasks
-- preserving low-level escape hatches while making safe paths the default
+```
+wwise-mcp/
+  server.py              MCP entry point
+  tools/                 One module per tool (46 tools)
+  tools/client.py        Shared WAAPI connection, validation, logging
+  contracts/             JSON input/output contracts and mock responses
+  reference/             Offline WAAPI name snapshots (versioned by SDK)
+  scripts/               Contract generation, catalog build, validation
+  tests/                 Pytest suite (37 test modules)
+  requirements.txt       Python dependencies
+```
 
+## How safety is layered
+
+1. **Input contract validation** — requests are checked against JSON schemas before any WAAPI call is made.
+2. **Semantic preflight** — for complex payloads (`object.set`, RTPC bindings, effect assignments), the server inspects key names, detects missing `@` prefixes, and flags suspicious structures.
+3. **Optional autofix** — when enabled, normalizes safe mistakes (key casing, missing prefixes) and reports every change applied.
+4. **Live property validation** — before setting a field, the server can query `getPropertyNames` for the object type and reject unknown field names with close-match suggestions.
+5. **Post-mutation verification** — after a successful WAAPI call, the server reads back the affected object to confirm the change took effect.
+6. **Structured error guidance** — when WAAPI rejects a call, responses include a `suggestion` field with likely causes and next steps.
+
+## Contributing
+
+1. Implement or update a tool in `wwise-mcp/tools/`.
+2. Add or update the corresponding contract in `wwise-mcp/contracts/`.
+3. Add tests in `wwise-mcp/tests/`.
+4. Run `pytest tests` to verify.
+
+## Author
+
+**John Tennant** — technical audio specialist and tools developer.
+AAA credits include Returnal, Gears of War 4 and 5, and The Ascent.
+
+[johntennant.com](https://johntennant.com) | [LinkedIn](https://linkedin.com/in/johntechsoundenthusiast)
+
+## License
+
+MIT. See [LICENSE](LICENSE).
