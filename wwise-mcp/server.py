@@ -38,7 +38,12 @@ mcp = FastMCP(
         "\"name\": \"\", and \"@Effect\" set to the existing Effect preset/shareset GUID as a string (same format as "
         "Wwise object ids). For inline plug-in instances use a nested @Effect object with classId and plug-in "
         "properties (Audiokinetic WAAPI example \"Setting an effect plug-in\"). Prefer the GUID string form for "
-        "existing presets; an object-shaped @Effect such as {\"id\": \"...\"} may cause object.set to return None."
+        "existing presets; an object-shaped @Effect such as {\"id\": \"...\"} may cause object.set to return None.\n\n"
+        "NAME/GUID/PATH LOOKUPS — prefer the dedicated helpers over hand-written WAQL:\n"
+        "- wwise_get_guid_and_path_from_name: exact name → all matching GUIDs + paths. "
+        "May return multiple results when the same name exists under different parents.\n"
+        "- wwise_get_path_from_guid: GUID → path. Use to resolve a GUID you already have "
+        "before passing it to a setter."
     ),
 )
 

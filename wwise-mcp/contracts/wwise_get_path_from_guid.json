@@ -1,0 +1,70 @@
+{
+  "tool": "wwise_get_path_from_guid",
+  "waapi_uri": "ak.wwise.core.object.get",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "guid"
+    ],
+    "properties": {
+      "guid": {
+        "type": "string"
+      },
+      "dry_run": {
+        "type": "boolean"
+      }
+    },
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "success",
+      "data",
+      "error"
+    ],
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "guid",
+              "path"
+            ],
+            "properties": {
+              "guid": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": {
+      "guid": "{AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE}",
+      "path": "\\Actor-Mixer Hierarchy\\Default Work Unit\\MCP_Tests\\_dry_run_object"
+    },
+    "error": null
+  }
+}

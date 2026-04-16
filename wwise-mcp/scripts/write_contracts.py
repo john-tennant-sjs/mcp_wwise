@@ -417,6 +417,68 @@ CONTRACTS = {
     "mock_response": {"success": True, "data": {}, "error": None},
 },
 
+
+"wwise_get_guid_and_path_from_name": {
+    "tool": "wwise_get_guid_and_path_from_name",
+    "waapi_uri": "ak.wwise.core.object.get",
+    "input_schema": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+            "name":    {"type": "string"},
+            "dry_run": {"type": "boolean"},
+        },
+        "additionalProperties": False,
+    },
+    "output_schema": out(NULL_OR({
+        "type": "array",
+        "items": {
+            "type": "object",
+            "required": ["id", "path"],
+            "properties": {
+                "id":   {"type": "string"},
+                "path": {"type": "string"},
+                "name": {"type": "string"},
+                "type": {"type": "string"},
+            },
+            "additionalProperties": False,
+        },
+    })),
+    "mock_response": {
+        "success": True,
+        "data": [{"id": MOCK_ID, "path": MOCK_PATH, "name": MOCK_NAME, "type": "Sound"}],
+        "error": None,
+    },
+},
+
+"wwise_get_path_from_guid": {
+    "tool": "wwise_get_path_from_guid",
+    "waapi_uri": "ak.wwise.core.object.get",
+    "input_schema": {
+        "type": "object",
+        "required": ["guid"],
+        "properties": {
+            "guid":    {"type": "string"},
+            "dry_run": {"type": "boolean"},
+        },
+        "additionalProperties": False,
+    },
+    "output_schema": out(NULL_OR({
+        "type": "object",
+        "required": ["guid", "path"],
+        "properties": {
+            "guid": {"type": "string"},
+            "path": {"type": "string"},
+        },
+        "additionalProperties": False,
+    })),
+    "mock_response": {
+        "success": True,
+        "data": {"guid": MOCK_ID, "path": MOCK_PATH},
+        "error": None,
+    },
+},
+
 }  # end CONTRACTS dict
 
 

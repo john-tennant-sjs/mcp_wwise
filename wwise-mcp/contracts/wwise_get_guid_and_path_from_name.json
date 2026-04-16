@@ -1,0 +1,83 @@
+{
+  "tool": "wwise_get_guid_and_path_from_name",
+  "waapi_uri": "ak.wwise.core.object.get",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "name"
+    ],
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "dry_run": {
+        "type": "boolean"
+      }
+    },
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "success",
+      "data",
+      "error"
+    ],
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "path"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "mock_response": {
+    "success": true,
+    "data": [
+      {
+        "id": "{AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE}",
+        "path": "\\Actor-Mixer Hierarchy\\Default Work Unit\\MCP_Tests\\_dry_run_object",
+        "name": "_dry_run_object",
+        "type": "Sound"
+      }
+    ],
+    "error": null
+  }
+}

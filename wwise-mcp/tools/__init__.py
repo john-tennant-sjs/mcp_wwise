@@ -47,6 +47,9 @@ from . import (
     get_property_and_object_lists,
     resolve_waapi_field,
     ui_bring_to_foreground,
+    # Lookup helpers
+    get_guid_and_path_from_name,
+    get_path_from_guid,
 )
 
 ALL_TOOLS = [
@@ -96,4 +99,7 @@ ALL_TOOLS = [
     get_property_and_object_lists,
     resolve_waapi_field,
     ui_bring_to_foreground,
+    # Lookup helpers
+    get_guid_and_path_from_name,
+    get_path_from_guid,
 ]

@@ -21,6 +21,13 @@ def wwise_get_object(
     """
     Query Wwise objects by path, GUID list, or WAQL expression.
 
+    PREFER DEDICATED HELPERS over this tool for common lookups:
+    - To find objects by name → use wwise_get_guid_and_path_from_name (exact match,
+      returns all GUIDs + paths, no WAQL authoring required).
+    - To resolve a GUID to a path → use wwise_get_path_from_guid.
+    Reserve wwise_get_object for bulk queries, type-filtered scans, or cases where
+    you already know the exact path or need custom return_props.
+
     Args:
         from_path:    List of object paths (e.g. ["\\\\Actor-Mixer Hierarchy"]).
         from_id:      List of GUIDs.
@@ -49,17 +56,17 @@ def wwise_get_object(
 
     props = return_props or DEFAULT_RETURN
 
-    if waql:
-        from_arg = {"search": waql}
-    elif from_path:
-        from_arg = {"path": from_path}
-    else:
-        from_arg = {"id": from_id}
-
     # EXECUTE
     try:
         with connect() as client:
-            result = client.call(WAAPI_URI, {"from": from_arg, "options": {"return": props}})
+            if waql:
+                # waql is a top-level argument; the deprecated `from.search` field
+                # is a free-text token search, not a WAQL expression.
+                result = client.call(WAAPI_URI, {"waql": waql, "options": {"return": props}})
+            elif from_path:
+                result = client.call(WAAPI_URI, {"from": {"path": from_path}, "options": {"return": props}})
+            else:
+                result = client.call(WAAPI_URI, {"from": {"id": from_id}, "options": {"return": props}})
     except Exception as e:
         write_phase2_log(TOOL_NAME, WAAPI_URI, checks, False, str(e))
         return {"success": False, "data": None, "error": str(e)}

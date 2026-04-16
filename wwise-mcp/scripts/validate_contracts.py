@@ -70,6 +70,9 @@ from tools.get_property_names import wwise_get_property_names
 from tools.get_property_and_object_lists import wwise_get_property_and_object_lists
 from tools.resolve_waapi_field import wwise_resolve_waapi_field
 from tools.ui_bring_to_foreground import wwise_ui_bring_to_foreground
+# Lookup helpers
+from tools.get_guid_and_path_from_name import wwise_get_guid_and_path_from_name
+from tools.get_path_from_guid import wwise_get_path_from_guid
 from tools.client import validate_response
 
 MOCK_PATH = "\\Actor-Mixer Hierarchy\\Default Work Unit\\MCP_Tests\\_dry_run"
@@ -121,6 +124,9 @@ DRY_RUN_CALLS = [
     ("wwise_get_property_and_object_lists", wwise_get_property_and_object_lists, {"property_name": "Volume", "object_type": "Sound", "dry_run": True}),
     ("wwise_resolve_waapi_field",         wwise_resolve_waapi_field,         {"object_type": "Sound", "user_label": "Output Bus", "dry_run": True}),
     ("wwise_ui_bring_to_foreground",      wwise_ui_bring_to_foreground,      {"dry_run": True}),
+    # Lookup helpers
+    ("wwise_get_guid_and_path_from_name", wwise_get_guid_and_path_from_name, {"name": "_dry_run_object", "dry_run": True}),
+    ("wwise_get_path_from_guid",          wwise_get_path_from_guid,          {"guid": MOCK_ID, "dry_run": True}),
 ]
 
 
