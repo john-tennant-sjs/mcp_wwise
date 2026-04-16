@@ -47,6 +47,9 @@ plan.md
 .cursor/
 agent-transcripts/
 
+# Test audio (not tracked; use local copies or WWISE_TEST_WAV env var)
+wavs_for_testing/
+
 # Local AI tools (machine-specific)
 .gemini/
 Claude/

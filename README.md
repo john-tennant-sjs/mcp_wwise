@@ -39,7 +39,7 @@ Each tool follows the same pattern: input validation against its contract, pre-c
 
 ### Prerequisites
 
-- Python 3.12+
+- Python 3.10+
 - Wwise Authoring with WAAPI enabled (Project Settings > Allow communication via WAAPI)
 - Tested with Wwise 2023.1.17 and 2025.1.3
 
