@@ -30,6 +30,7 @@ def test_get_object_missing_path():
     assert not r["success"]
 
 
+@pytest.mark.no_waapi
 def test_get_object_no_args():
     r = wwise_get_object()
     assert not r["success"]

@@ -1,4 +1,7 @@
 import sys, os
+
+import pytest
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from tools.transport_execute import wwise_transport_execute
 
@@ -14,8 +17,10 @@ def test_play_by_path(test_sound):
     assert r["success"], r["error"]
 
 
-def test_invalid_action(test_sound):
-    r = wwise_transport_execute(test_sound["id"], action="explode")
+@pytest.mark.no_waapi
+def test_invalid_action():
+    # Action is validated before any WAAPI connection; object_ref is unused here.
+    r = wwise_transport_execute("{AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE}", action="explode")
     assert not r["success"]
 
 

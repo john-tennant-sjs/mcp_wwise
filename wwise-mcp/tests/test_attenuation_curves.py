@@ -3,6 +3,9 @@ Tests for attenuation curve get/set.
 Requires an Attenuation object in the project; creates one in MCP_Tests.
 """
 import sys, os
+
+import pytest
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from waapi import WaapiClient
 
@@ -60,22 +63,26 @@ def test_set_attenuation_curve_live():
         _delete_obj(attn_id)
 
 
+@pytest.mark.no_waapi
 def test_get_attenuation_curve_invalid_type():
     r = wwise_get_attenuation_curve("\\some\\path", "InvalidCurveType")
     assert not r["success"]
 
 
+@pytest.mark.no_waapi
 def test_set_attenuation_curve_invalid_use():
     r = wwise_set_attenuation_curve("\\p", "VolumeDryUsage", "BadUse", [{"x": 0, "y": 0, "shape": "Linear"}])
     assert not r["success"]
 
 
+@pytest.mark.no_waapi
 def test_get_attenuation_curve_dry_run():
     r = wwise_get_attenuation_curve("\\Attenuations\\Default Work Unit\\_test", "VolumeDryUsage", dry_run=True)
     assert r["success"]
     assert "points" in r["data"]
 
 
+@pytest.mark.no_waapi
 def test_set_attenuation_curve_dry_run():
     r = wwise_set_attenuation_curve(
         "\\Attenuations\\Default Work Unit\\_test", "VolumeDryUsage", "Custom",

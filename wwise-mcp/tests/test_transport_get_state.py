@@ -3,6 +3,9 @@ Transport objects are session-scoped: they exist only while the WAAPI connection
 that created them is open. These tests verify contract, validation, and error behaviour.
 """
 import sys, os
+
+import pytest
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from tools.create_transport import wwise_create_transport
 from tools.transport_get_state import wwise_transport_get_state
@@ -17,11 +20,13 @@ def test_transport_get_state_stale_id(test_sound):
     assert not r["success"]  # "Unknown transport object."
 
 
+@pytest.mark.no_waapi
 def test_transport_get_state_invalid_id():
     r = wwise_transport_get_state(-1)
     assert not r["success"]
 
 
+@pytest.mark.no_waapi
 def test_transport_get_state_dry_run():
     r = wwise_transport_get_state(0, dry_run=True)
     assert r["success"]

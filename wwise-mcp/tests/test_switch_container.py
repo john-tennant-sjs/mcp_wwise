@@ -6,6 +6,9 @@ most live tests verify the error path; we also test dry_run and get_assignments
 on an existing SwitchContainer.
 """
 import sys, os
+
+import pytest
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from waapi import WaapiClient
 
@@ -70,27 +73,32 @@ def test_switch_container_remove_assignment_bad_refs():
     assert not r["success"]
 
 
+@pytest.mark.no_waapi
 def test_switch_container_get_assignments_dry_run():
     r = wwise_switch_container_get_assignments("\\some\\path", dry_run=True)
     assert r["success"]
     assert isinstance(r["data"]["assignments"], list)
 
 
+@pytest.mark.no_waapi
 def test_switch_container_add_assignment_dry_run():
     r = wwise_switch_container_add_assignment("\\child", "\\state", dry_run=True)
     assert r["success"]
 
 
+@pytest.mark.no_waapi
 def test_switch_container_remove_assignment_dry_run():
     r = wwise_switch_container_remove_assignment("\\child", "\\state", dry_run=True)
     assert r["success"]
 
 
+@pytest.mark.no_waapi
 def test_switch_container_add_empty_child():
     r = wwise_switch_container_add_assignment("", "\\state")
     assert not r["success"]
 
 
+@pytest.mark.no_waapi
 def test_switch_container_remove_empty_state():
     r = wwise_switch_container_remove_assignment("\\child", "")
     assert not r["success"]

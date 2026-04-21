@@ -3,6 +3,9 @@ Tests for soundbank get/set inclusions.
 Uses the Default SoundBank if available.
 """
 import sys, os
+
+import pytest
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from waapi import WaapiClient
 
@@ -37,17 +40,20 @@ def test_soundbank_get_inclusions_nonexistent():
     assert not r["success"]
 
 
+@pytest.mark.no_waapi
 def test_soundbank_get_inclusions_empty_ref():
     r = wwise_soundbank_get_inclusions("")
     assert not r["success"]
 
 
+@pytest.mark.no_waapi
 def test_soundbank_get_inclusions_dry_run():
     r = wwise_soundbank_get_inclusions("\\SoundBanks\\Default Work Unit\\Init", dry_run=True)
     assert r["success"]
     assert isinstance(r["data"]["inclusions"], list)
 
 
+@pytest.mark.no_waapi
 def test_soundbank_set_inclusions_invalid_operation():
     r = wwise_soundbank_set_inclusions(
         "\\SoundBanks\\Default Work Unit\\Init",
@@ -57,11 +63,13 @@ def test_soundbank_set_inclusions_invalid_operation():
     assert not r["success"]
 
 
+@pytest.mark.no_waapi
 def test_soundbank_set_inclusions_empty_list():
     r = wwise_soundbank_set_inclusions("\\sb", inclusions=[])
     assert not r["success"]
 
 
+@pytest.mark.no_waapi
 def test_soundbank_set_inclusions_dry_run():
     r = wwise_soundbank_set_inclusions(
         "\\SoundBanks\\Default Work Unit\\Init",

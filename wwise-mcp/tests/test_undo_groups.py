@@ -5,6 +5,9 @@ connection, begin+end across two tool calls will fail.
 These tests verify individual tool contracts and error behaviour.
 """
 import sys, os
+
+import pytest
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from tools.undo_begin_group import wwise_undo_begin_group
 from tools.undo_end_group import wwise_undo_end_group
@@ -34,16 +37,19 @@ def test_undo_end_group_empty_name():
     assert not r["success"]
 
 
+@pytest.mark.no_waapi
 def test_undo_begin_dry_run():
     r = wwise_undo_begin_group(dry_run=True)
     assert r["success"]
 
 
+@pytest.mark.no_waapi
 def test_undo_end_dry_run():
     r = wwise_undo_end_group("_test", dry_run=True)
     assert r["success"]
 
 
+@pytest.mark.no_waapi
 def test_undo_cancel_dry_run():
     r = wwise_undo_cancel_group(dry_run=True)
     assert r["success"]

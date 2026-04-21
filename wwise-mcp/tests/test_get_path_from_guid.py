@@ -9,6 +9,7 @@ from tests.conftest import TEST_PARENT
 # dry_run (no Wwise required)
 # ---------------------------------------------------------------------------
 
+@pytest.mark.no_waapi
 def test_dry_run_returns_mock():
     r = wwise_get_path_from_guid(guid="{AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE}", dry_run=True)
     assert r["success"], r["error"]
@@ -35,6 +36,7 @@ def test_unknown_guid_returns_failure():
     assert r["error"]
 
 
+@pytest.mark.no_waapi
 def test_empty_guid_returns_failure():
     r = wwise_get_path_from_guid(guid="")
     assert not r["success"]

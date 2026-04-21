@@ -2,9 +2,13 @@ import json
 import os
 import sys
 
+import pytest
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from tools.resolve_waapi_field import normalize_label, wwise_resolve_waapi_field
+
+pytestmark = pytest.mark.no_waapi
 
 REF_DIR = os.path.join(os.path.dirname(__file__), "..", "reference")
 ROOT = os.path.join(REF_DIR, "wobject_waapi_names_2023_1_17.json")

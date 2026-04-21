@@ -1,6 +1,11 @@
 import sys, os
+
+import pytest
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from tools.add_rtpc_binding import wwise_add_rtpc_binding
+
+pytestmark = pytest.mark.no_waapi
 
 
 def test_add_rtpc_binding_dry_run_success():

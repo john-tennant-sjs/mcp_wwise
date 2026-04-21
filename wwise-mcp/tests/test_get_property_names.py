@@ -1,8 +1,12 @@
 import os
 import sys
 
+import pytest
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from tools.get_property_names import wwise_get_property_names
+
+pytestmark = pytest.mark.no_waapi
 
 
 def test_get_property_names_dry_run():

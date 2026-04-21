@@ -6,6 +6,9 @@ wwise_transport_destroy tries to use a new connection.
 These tests verify contract, validation, and error behaviour.
 """
 import sys, os
+
+import pytest
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from tools.transport_destroy import wwise_transport_destroy
 
@@ -21,11 +24,13 @@ def test_transport_destroy_stale_id(test_sound):
     assert not r["success"]  # "Unknown transport object."
 
 
+@pytest.mark.no_waapi
 def test_transport_destroy_invalid_id():
     r = wwise_transport_destroy(-1)
     assert not r["success"]
 
 
+@pytest.mark.no_waapi
 def test_transport_destroy_dry_run():
     r = wwise_transport_destroy(0, dry_run=True)
     assert r["success"]

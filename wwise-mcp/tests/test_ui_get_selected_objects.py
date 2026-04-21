@@ -1,4 +1,7 @@
 import sys, os
+
+import pytest
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from tools.ui_get_selected_objects import wwise_ui_get_selected_objects
 
@@ -14,6 +17,7 @@ def test_ui_get_selected_objects_custom_props():
     assert r["success"], r["error"]
 
 
+@pytest.mark.no_waapi
 def test_ui_get_selected_objects_dry_run():
     r = wwise_ui_get_selected_objects(dry_run=True)
     assert r["success"]

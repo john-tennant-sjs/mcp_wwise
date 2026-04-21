@@ -53,11 +53,13 @@ def test_import_audio_basic(temp_wav):
     _delete_object(f"{TEST_PARENT}\\_imported_sound")
 
 
+@pytest.mark.no_waapi
 def test_import_audio_empty():
     r = wwise_import_audio(imports=[])
     assert not r["success"]
 
 
+@pytest.mark.no_waapi
 def test_import_audio_missing_file():
     r = wwise_import_audio(imports=[{
         "audioFile": "T:\\does_not_exist.wav",

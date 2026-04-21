@@ -99,7 +99,7 @@ cd wwise-mcp
 pytest tests
 ```
 
-Dry-run tests (contract validation, mock responses) work without a running Wwise instance. Live tests require Wwise Authoring to be open with a project loaded.
+Tests that only exercise validation, dry-run paths, or offline helpers are marked `@pytest.mark.no_waapi` and run on CI. When WAAPI is not reachable (for example on GitHub Actions), all other tests are skipped automatically so the job stays green. Full integration coverage still requires Wwise Authoring open with a project loaded locally.
 
 ## Repository structure
 
