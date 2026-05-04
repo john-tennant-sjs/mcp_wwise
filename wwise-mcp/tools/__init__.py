@@ -1,6 +1,7 @@
 """tools — Phase 2+4 atomic tools plus WAAPI introspection helpers."""
 
 from . import (
+    sound_engine_stop_all,
     get_object,
     create_object,
     delete_object,
@@ -99,6 +100,8 @@ ALL_TOOLS = [
     get_property_and_object_lists,
     resolve_waapi_field,
     ui_bring_to_foreground,
+    # Sound engine
+    sound_engine_stop_all,
     # Lookup helpers
     get_guid_and_path_from_name,
     get_path_from_guid,
