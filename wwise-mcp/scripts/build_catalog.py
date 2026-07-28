@@ -13,6 +13,7 @@ Exit code: 0 on pass, 1 on failure.
 """
 
 import json
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -22,7 +23,8 @@ LOGS_DIR = ROOT / "logs"
 LOG_FILE = LOGS_DIR / "phase1.jsonl"
 CATALOG_FILE = ROOT / "waapi-catalog.json"
 TARGETS_FILE = ROOT / "phase2-targets.json"
-WAAPI_URL = "ws://127.0.0.1:9000/waapi"
+_waapi_port = int(os.environ.get("WWISE_WAAPI_PORT", 8080))
+WAAPI_URL = f"ws://127.0.0.1:{_waapi_port}/waapi"
 
 
 def utc_now() -> str:

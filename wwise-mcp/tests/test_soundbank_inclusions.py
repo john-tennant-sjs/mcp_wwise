@@ -12,7 +12,8 @@ from waapi import WaapiClient
 from tools.soundbank_get_inclusions import wwise_soundbank_get_inclusions
 from tools.soundbank_set_inclusions import wwise_soundbank_set_inclusions
 
-WAAPI_URL = "ws://127.0.0.1:9000/waapi"
+_waapi_port = int(os.environ.get("WWISE_WAAPI_PORT", 8080))
+WAAPI_URL = f"ws://127.0.0.1:{_waapi_port}/waapi"
 
 
 def _get_default_soundbank_path():

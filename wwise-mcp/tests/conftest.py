@@ -11,10 +11,13 @@ not marked ``@pytest.mark.no_waapi`` are skipped — see ``pytest_collection_mod
 
 from __future__ import annotations
 
+import os
+
 import pytest
 from waapi import WaapiClient
 
-WAAPI_URL = "ws://127.0.0.1:9000/waapi"
+_waapi_port = int(os.environ.get("WWISE_WAAPI_PORT", 8080))
+WAAPI_URL = f"ws://127.0.0.1:{_waapi_port}/waapi"
 TEST_PARENT = "\\Actor-Mixer Hierarchy\\Default Work Unit\\MCP_Tests"
 DEFAULT_WORK_UNIT = "\\Actor-Mixer Hierarchy\\Default Work Unit"
 
@@ -42,7 +45,7 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list) -> None:
     if config._waapi_reachable:
         return
     skip_unmarked = pytest.mark.skip(
-        reason="WAAPI not reachable (no Wwise / WAAPI on ws://127.0.0.1:9000). "
+        reason=f"WAAPI not reachable (no Wwise / WAAPI on {WAAPI_URL}). "
         "Open the test project in Wwise locally to run integration tests.",
     )
     for item in items:

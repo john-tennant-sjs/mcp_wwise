@@ -12,7 +12,8 @@ from waapi import WaapiClient
 from tools.get_attenuation_curve import wwise_get_attenuation_curve
 from tools.set_attenuation_curve import wwise_set_attenuation_curve
 
-WAAPI_URL = "ws://127.0.0.1:9000/waapi"
+_waapi_port = int(os.environ.get("WWISE_WAAPI_PORT", 8080))
+WAAPI_URL = f"ws://127.0.0.1:{_waapi_port}/waapi"
 ATTN_PARENT = "\\Attenuations\\Default Work Unit"
 
 

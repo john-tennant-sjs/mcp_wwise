@@ -92,6 +92,31 @@ Configure your MCP host to launch `python server.py` from the `wwise-mcp/` direc
 
 Cursor, VS Code, and other MCP hosts use similar configuration. Adjust `cwd` (or `command`) to match your local checkout.
 
+### Configuration
+
+| Environment variable | Default | Description |
+|---|---|---|
+| `WWISE_WAAPI_PORT` | `8080` | TCP port that Wwise's WAAPI WebSocket server listens on. |
+
+The port is `8080` by default. Set `WWISE_WAAPI_PORT` if your Wwise instance is configured to use a different port, or if you need to run multiple Wwise instances on separate ports.
+
+To set it from an MCP host, add an `env` block to your server entry:
+
+```json
+{
+  "mcpServers": {
+    "wwise": {
+      "command": "python",
+      "args": ["server.py"],
+      "cwd": "/path/to/wwise-mcp",
+      "env": {
+        "WWISE_WAAPI_PORT": "9001"
+      }
+    }
+  }
+}
+```
+
 ### Run tests
 
 ```bash

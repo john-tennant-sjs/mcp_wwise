@@ -10,7 +10,8 @@ mcp = FastMCP(
     name="wwise-mcp",
     instructions=(
         "MCP server for Audiokinetic Wwise. "
-        "Provides tools to interact with a running Wwise instance via WAAPI on port 9000.\n\n"
+        "Provides tools to interact with a running Wwise instance via WAAPI (default port 8080; "
+        "override with the WWISE_WAAPI_PORT environment variable).\n\n"
         "Natural-language or UI field labels are not WAAPI strings. Before wwise_set_property or "
         "wwise_set_reference: use wwise_get_object to read the target's \"type\", then call "
         "wwise_resolve_waapi_field with that object_type and the user's label to obtain waapi_name, "

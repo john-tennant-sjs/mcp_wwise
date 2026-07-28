@@ -1,12 +1,13 @@
 """
 Phase 0 connection probe.
-Connects to WAAPI on ws://localhost:9000/waapi, calls ak.wwise.core.getInfo,
+Connects to WAAPI (port from WWISE_WAAPI_PORT env var, default 8080), calls ak.wwise.core.getInfo,
 and writes a structured result to logs/phase0.jsonl.
 
 Exit code: 0 on pass, 1 on failure.
 """
 
 import json
+import os
 import sys
 import traceback
 from datetime import datetime, timezone
@@ -14,7 +15,8 @@ from pathlib import Path
 
 LOGS_DIR = Path(__file__).parent.parent / "logs"
 LOG_FILE = LOGS_DIR / "phase0.jsonl"
-WAAPI_URL = "ws://127.0.0.1:9000/waapi"
+_waapi_port = int(os.environ.get("WWISE_WAAPI_PORT", 8080))
+WAAPI_URL = f"ws://127.0.0.1:{_waapi_port}/waapi"
 
 
 def utc_now() -> str:
@@ -44,7 +46,7 @@ def run_probe() -> dict:
             "error": f"CannotConnectToWaapiException: {e}",
             "detail": {
                 "transport": "websocket",
-                "port": 9000,
+                "port": _waapi_port,
                 "url": WAAPI_URL,
             },
         }
@@ -58,7 +60,7 @@ def run_probe() -> dict:
             "error": f"{type(e).__name__}: {e}",
             "detail": {
                 "transport": "websocket",
-                "port": 9000,
+                "port": _waapi_port,
                 "url": WAAPI_URL,
                 "traceback": traceback.format_exc(),
             },
@@ -72,7 +74,7 @@ def run_probe() -> dict:
             "tool": None,
             "pass": False,
             "error": "ak.wwise.core.getInfo returned None",
-            "detail": {"transport": "websocket", "port": 9000},
+            "detail": {"transport": "websocket", "port": _waapi_port},
         }
 
     wwise_version = result.get("version", {})
@@ -91,7 +93,7 @@ def run_probe() -> dict:
         "detail": {
             "wwise_version": version_str,
             "transport": "websocket",
-            "port": 9000,
+            "port": _waapi_port,
             "url": WAAPI_URL,
             "raw_getInfo": result,
         },

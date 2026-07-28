@@ -8,6 +8,7 @@ from __future__ import annotations
 import asyncio
 import json
 import jsonschema
+import os
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
@@ -15,7 +16,8 @@ from typing import Generator
 
 from waapi import WaapiClient, CannotConnectToWaapiException
 
-WAAPI_URL = "ws://127.0.0.1:9000/waapi"
+_waapi_port = int(os.environ.get("WWISE_WAAPI_PORT", 8080))
+WAAPI_URL = f"ws://127.0.0.1:{_waapi_port}/waapi"
 ROOT_DIR = Path(__file__).parent.parent
 LOGS_DIR = ROOT_DIR / "logs"
 PHASE2_LOG = LOGS_DIR / "phase2.jsonl"
@@ -42,7 +44,7 @@ def utc_now() -> str:
 
 @contextmanager
 def connect() -> Generator[WaapiClient, None, None]:
-    """Context manager that yields a connected WaapiClient on port 9000.
+    """Context manager that yields a connected WaapiClient on the configured WAAPI port.
 
     Creates a fresh event loop for the current thread if none exists — required
     when running inside FastMCP's AnyIO worker threads.
