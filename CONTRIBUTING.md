@@ -6,7 +6,7 @@ Thanks for considering a contribution.
 
 - This repo is an MCP server that controls **Audiokinetic Wwise Authoring** via **WAAPI**.
 - Most meaningful tests require a local Wwise Authoring installation with WAAPI enabled.
-- The repo intentionally does **not** include any Wwise project content (see `MCP_Wwise_Playground/` in `.gitignore`).
+- The repo intentionally does **not** include any Wwise project content.
 
 ## Getting started
 
@@ -14,7 +14,7 @@ Thanks for considering a contribution.
 
 - Python 3.10+ (recommended: 3.11+)
 - Wwise Authoring installed (for integration tests)
-- WAAPI enabled in Wwise (default websocket URL used by tests: `ws://127.0.0.1:9000/waapi`)
+- WAAPI enabled in Wwise (default websocket URL used by tests: `ws://127.0.0.1:8080/waapi`)
 
 ### Install
 

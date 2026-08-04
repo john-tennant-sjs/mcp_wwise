@@ -53,3 +53,4 @@ wavs_for_testing/
 # Local AI tools (machine-specific)
 .gemini/
 Claude/
+linkedin_post_draft.md
